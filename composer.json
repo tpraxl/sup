@@ -1,0 +1,39 @@
+{
+    "name": "sjorso/sup",
+    "description": "Library for Sup subtitles",
+    "license": "MIT",
+    "homepage": "https://github.com/SjorsO/sup",
+    "keywords": [
+        "subtitles",
+        "sup"
+    ],
+    "authors": [
+        {
+            "name": "Sjors Ottjes",
+            "email": "sjorsottjes@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SjorsO\\Sup\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SjorsO\\Sup\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SjorsO\\Sup\\Providers\\SupProvider"
+            ]
+        }
+    }
+}
