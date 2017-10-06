@@ -27,50 +27,25 @@ class HddvdCueTest extends BaseTestCase
         $this->assertSame(17484, $stream->position());
     }
 
-  //  /** @test */
-  //  function it_can_parse_the_second_cue()
-  //  {
-   //     $filePath = $this->testFilePath.'/sup-hddvd/01-section-01+02.dat';
-//
-   //     $stream = new Stream($filePath);
-//
-   //     $stream->skip(17484);
-//
-   //     $cue = new HddvdSupCue($stream, $filePath);
-//
-   //     $this->assertSame(227394, $cue->getStartTime());
+    /** @test */
+    function it_can_parse_the_second_cue()
+    {
+        $filePath = $this->testFilePath.'/sup-hddvd/01-section-01+02.dat';
 
+        $stream = new Stream($filePath);
 
-        // 0x83 @ 16432  (palette section)
-        // --> 768 bytes of colors
-        // total length 769
+        $firstCue = new HddvdSupCue($stream, $filePath);
 
-        // 0x84 @ 17201  (alpha palette)
-        // --> 256 bytes of alpha
-        // total length 257
+        $secondCue = new HddvdSupCue($stream, $filePath);
 
-        // 0x85 @ 17458  (coordinates)
-        // --> 6 bytes
-        // every value is 12 bits
-        // 1. x
-        // 2. width
-        // 3. y
-        // 4. height
+        $this->assertSame(227394, $secondCue->getStartTime());
 
-        // 0x86 @ 17465  (data index)
-        // --> 8 bytes
-        // int32 startOdd;
-        // int32 startEven;
+        $this->assertSame(1772, $secondCue->getWidth());
+        $this->assertSame(602, $secondCue->getHeight());
 
-        // 0xff @ 17474  (end)
-        // --> 0 bytes
+        $this->assertSame(1651, $secondCue->getX());
+        $this->assertSame(166, $secondCue->getY());
 
-//##################################################
-
-        // 0x01 @ 17475
-        // --> 5 bytes
-
-        // 0x02 @ 17481
-        // --> 2 bytes  (END OF FILE)
-   // }
+        $this->assertSame(33248, $stream->position());
+    }
 }
