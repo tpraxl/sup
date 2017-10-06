@@ -8,7 +8,7 @@ use SjorsO\Sup\Bluray\Sections\EndSection;
 use SjorsO\Sup\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Bluray\Sections\TimeSection;
-use SjorsO\Sup\Streams\SupStream;
+use SjorsO\Sup\Streams\Stream;
 
 class BluraySection
 {
@@ -17,12 +17,12 @@ class BluraySection
     }
 
     /**
-     * @param SupStream $stream stream positioned after section header (PG)
+     * @param Stream $stream stream positioned after section header (PG)
      * @param $filePath
      * @return DataSection
      * @throws Exception
      */
-    public static function get(SupStream $stream, $filePath)
+    public static function get(Stream $stream, $filePath)
     {
         $stream->skip(8);
 

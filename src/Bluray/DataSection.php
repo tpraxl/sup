@@ -3,7 +3,7 @@
 namespace SjorsO\Sup\Bluray;
 
 use Exception;
-use SjorsO\Sup\Streams\SupStream;
+use SjorsO\Sup\Streams\Stream;
 
 abstract class DataSection
 {
@@ -40,7 +40,7 @@ abstract class DataSection
 
     protected function readHeader()
     {
-        $stream = new SupStream($this->filePath, $this->startPosition, $this->endPosition);
+        $stream = new Stream($this->filePath, $this->startPosition, $this->endPosition);
 
         if($stream->read(2) !== 'PG') {
             throw new Exception('Invalid section header (' . basename($this->filePath) . " @ {$this->startPosition})");
@@ -79,10 +79,10 @@ abstract class DataSection
     public abstract function getSectionIdentifier();
 
     /**
-     * @param SupStream $stream stream positioned at the start of the data
-     * @return SupStream stream positioned at the end of the data
+     * @param Stream $stream stream positioned at the start of the data
+     * @return Stream stream positioned at the end of the data
      */
-    protected abstract function readData(SupStream $stream);
+    protected abstract function readData(Stream $stream);
 
     public function exportDataSection($filePath)
     {

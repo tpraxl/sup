@@ -4,7 +4,7 @@ namespace SjorsO\Sup\Streams;
 
 use Exception;
 
-class SupStream
+class Stream
 {
     protected $handle;
 
@@ -24,19 +24,41 @@ class SupStream
         return $this->read(1);
     }
 
+    public function bytes($length)
+    {
+        return str_split($this->read($length));
+    }
+
     public function uint8()
     {
-        return unpack("C", $this->read(1))[1];
+        return unpack('C', $this->read(1))[1];
+    }
+
+    public function uint8s($length)
+    {
+        return array_map(function($byte) {
+            return unpack('C', $byte)[1];
+        }, $this->bytes($length));
     }
 
     public function uint16()
     {
-        return unpack("n", $this->read(2))[1];
+        return unpack('n', $this->read(2))[1];
+    }
+
+    public function uint16le()
+    {
+        return unpack('v', $this->read(2))[1];
     }
 
     public function uint32()
     {
-        return unpack("N", $this->read(4))[1];
+        return unpack('N', $this->read(4))[1];
+    }
+
+    public function uint32le()
+    {
+        return (int)round(unpack('V', $this->read(4))[1] / 90);
     }
 
     public function skip($length)
@@ -55,6 +77,11 @@ class SupStream
         $this->assertMaximumPosition($length);
 
         return fread($this->handle, $length);
+    }
+
+    public function seek($position)
+    {
+        fseek($this->handle, $position, SEEK_SET);
     }
 
     public function position()

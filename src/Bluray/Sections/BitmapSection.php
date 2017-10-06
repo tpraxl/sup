@@ -5,7 +5,7 @@ namespace SjorsO\Sup\Bluray\Sections;
 use Exception;
 use SjorsO\Sup\Bluray\DataSection;
 use SjorsO\Sup\Streams\RleStream;
-use SjorsO\Sup\Streams\SupStream;
+use SjorsO\Sup\Streams\Stream;
 
 class BitmapSection extends DataSection
 {
@@ -29,11 +29,11 @@ class BitmapSection extends DataSection
     }
 
     /**
-     * @param SupStream $stream stream positioned at the start of the data
-     * @return SupStream stream positioned at the end of the data
+     * @param Stream $stream stream positioned at the start of the data
+     * @return Stream stream positioned at the end of the data
      * @throws Exception
      */
-    protected function readData(SupStream $stream)
+    protected function readData(Stream $stream)
     {
         $stream->skip(3);
 

@@ -4,7 +4,7 @@ namespace SjorsO\Sup\Bluray;
 
 use Exception;
 use SjorsO\Sup\Bluray\Sections\EndSection;
-use SjorsO\Sup\Streams\SupStream;
+use SjorsO\Sup\Streams\Stream;
 
 class Sup
 {
@@ -13,14 +13,14 @@ class Sup
     /** @var SupCue[]  */
     protected $cues = [];
 
-    /** @var SupStream */
+    /** @var Stream */
     protected $stream;
 
     public function __construct($filePath)
     {
         $this->filePath = $filePath;
 
-        $this->stream = new SupStream($this->filePath);
+        $this->stream = new Stream($this->filePath);
 
         /** @var SupCue[] $cues */
         $cues = [];
