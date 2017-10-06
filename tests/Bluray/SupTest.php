@@ -6,25 +6,19 @@ use SjorsO\Sup\Bluray\Sup;
 
 class SupTest extends BaseTestCase
 {
-//    /** @test */
-//    function do_this()
-//    {
-//       $sup = new Sup($this->testFilePath . '/sup-bluray/sup-04-fullscreen.sup');
-//    }
+    /** @test */
+    function it_can_parse_a_full_file()
+    {
+        $sup = new Sup($this->testFilePath . '/sup-bluray/sup-01.sup');
 
-//    /** @test */
-//    function it_can_parse_a_full_file()
-//    {
-//        $sup = new Sup($this->testFilePath . '/sup-bluray/sup-01.sup');
-//
-//        $cues = $sup->getCues();
-//        var_dump($cues[0]);exit;
-//        $this->assertSame(755, count($cues));
-//
-//        $outputImagePath = $cues[50]->extractImage($this->tempFilesDirectory);
-//
-//        $this->assertSame('a1c5aca06e3e2d50e88159b8d7d41031810a6b54', sha1_file($outputImagePath));
-//    }
+        $cues = $sup->getCues();
+
+        $this->assertSame(755, count($cues));
+
+        $outputImagePath = $cues[50]->extractImage($this->tempFilesDirectory);
+
+        $this->assertSame('a42019ebbd6597ca74c5714c56a6b746c39bedd1', sha1_file($outputImagePath));
+    }
 
     /** @test */
     function it_can_extract_all_images()

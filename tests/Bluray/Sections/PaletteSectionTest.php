@@ -13,14 +13,10 @@ class PaletteSectionTest extends BaseTestCase
 
         $section = new PaletteSection($filePath);
 
-        $colors = $section->getColors();
+        $this->assertSame([0, 0, 0, 127], $section->getColor(0));
 
-        $this->assertSame(252, count($colors));
+        $this->assertSame([0, 0, 0, 27], $section->getColor(25));
 
-        $this->assertSame([0, 0, 0, 127], $colors[0]);
-
-        $this->assertSame([0, 0, 0, 27], $colors[25]);
-
-        $this->assertSame([38, 38, 38, 0], $colors[75]);
+        $this->assertSame([38, 38, 38, 0], $section->getColor(75));
     }
 }

@@ -11,6 +11,10 @@ class PaletteSection extends DataSection
     /** @var array [ index => [r, g, b, alpha], ...] */
     protected $colors = [];
 
+    protected $isLazy = false;
+
+    protected $lazyLoadClosure = null;
+
     public function getSectionIdentifier()
     {
         return "\x14";
@@ -29,38 +33,56 @@ class PaletteSection extends DataSection
             throw new Exception('Invalid palette data length');
         }
 
-        $paletteEntries = ($this->sectionDataLength - 2) / 5;
+        $paletteEntriesCount = ($this->sectionDataLength - 2) / 5;
 
-        for($i = 0; $i < $paletteEntries; $i++) {
-            $index = $stream->uint8();
-
-            $y = $stream->uint8() - 16;
-            $cb = $stream->uint8() - 128;
-            $cr = $stream->uint8() - 128;
-
-            // 0 = transparent, 255 = opaque
-            $alpha = $stream->uint8();
-
-            $r = max(0, min(255, (int)round(1.1644 * $y + 1.596 * $cr)));
-            $g = max(0, min(255, (int)round(1.1644 * $y - 0.813 * $cr - 0.391 * $cb)));
-            $b = max(0, min(255, (int)round(1.1644 * $y + 2.018 * $cb)));
-
-            // convert to 0-127, where 0 = opaque, 127 = transparent
-            $alpha = ((int)(substr($alpha - 255, 1))) >> 1;
-
-            $this->colors[$index] = [$r, $g, $b, $alpha];
+        if($paletteEntriesCount === 0) {
+            return $stream;
         }
+
+        $bytes = $stream->read($paletteEntriesCount * 5);
+
+        $this->isLazy = true;
+
+        $this->lazyLoadClosure = function() use ($bytes) {
+            $bytes = array_map(function($byte) {
+                // change all bytes to uint8
+                return unpack('C', $byte)[1];
+            }, str_split($bytes));
+
+            $colors = [];
+
+            for($i = 0; $i < count($bytes); $i += 5) {
+                $index = $bytes[$i];
+
+                $y  = $bytes[$i+1] - 16;
+                $cb = $bytes[$i+2] - 128;
+                $cr = $bytes[$i+3] - 128;
+
+                // 0 = transparent, 255 = opaque
+                $alpha = $bytes[$i+4];
+
+                $r = max(0, min(255, (int)round(1.1644 * $y + 1.596 * $cr)));
+                $g = max(0, min(255, (int)round(1.1644 * $y - 0.813 * $cr - 0.391 * $cb)));
+                $b = max(0, min(255, (int)round(1.1644 * $y + 2.018 * $cb)));
+
+                // convert to 0-127, where 0 = opaque, 127 = transparent
+                $alpha = ((int)(substr($alpha - 255, 1))) >> 1;
+
+                $colors[$index] = [$r, $g, $b, $alpha];
+            }
+
+            return $colors;
+        };
 
         return $stream;
     }
 
-    public function getColors()
-    {
-        return $this->colors;
-    }
-
     public function hasColors()
     {
+        if($this->isLazy) {
+            return true;
+        }
+
         return count($this->colors) > 0;
     }
 
@@ -71,6 +93,14 @@ class PaletteSection extends DataSection
      */
     public function getColor($index)
     {
+        if($this->isLazy) {
+            $this->colors = ($this->lazyLoadClosure)();
+
+            $this->lazyLoadClosure = null;
+
+            $this->isLazy = false;
+        }
+
         if(!isset($this->colors[$index])) {
             return [0, 0, 0, 127];
         }
