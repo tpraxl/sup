@@ -3,13 +3,16 @@
 namespace SjorsO\Sup\Tests;
 
 use SjorsO\Sup\Bluray\Sup;
+use Spatie\Snapshots\MatchesSnapshots;
 
 class SupTest extends BaseTestCase
 {
+    use MatchesSnapshots;
+
     /** @test */
     function it_can_parse_a_full_file()
     {
-        $sup = new Sup($this->testFilePath . '/sup-bluray/sup-01.sup');
+        $sup = new Sup($this->testFilePath.'/sup-bluray/sup-01.sup');
 
         $cues = $sup->getCues();
 
@@ -17,7 +20,7 @@ class SupTest extends BaseTestCase
 
         $outputImagePath = $cues[50]->extractImage($this->tempFilesDirectory);
 
-        $this->assertSame('a42019ebbd6597ca74c5714c56a6b746c39bedd1', sha1_file($outputImagePath));
+        $this->assertMatchesFileHashSnapshot($outputImagePath);
     }
 
     /** @test */
@@ -33,12 +36,12 @@ class SupTest extends BaseTestCase
 
         $this->assertSame(24, count($outputFilePaths));
 
-        $this->assertSame('d75e09ce3986cba49bd8dfbf0d1f8adb386e0ec7', sha1_file($outputFilePaths[12]));
+        $this->assertMatchesFileHashSnapshot($outputFilePaths[12]);
 
         foreach($outputFilePaths as $filePath) {
-            $this->assertTrue(file_exists($filePath), $filePath . ' does not exist');
+            $this->assertTrue(file_exists($filePath), $filePath.' does not exist');
 
-            $this->assertTrue(filesize($filePath) > 512, basename($filePath) . ' was not at least 512 bytes big');
+            $this->assertTrue(filesize($filePath) > 512, basename($filePath).' was not at least 512 bytes big');
         }
     }
 
