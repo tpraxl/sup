@@ -4,12 +4,9 @@ namespace SjorsO\Sup\Tests;
 
 use SjorsO\Sup\Hddvd\HddvdSupCue;
 use SjorsO\Sup\Streams\Stream;
-use Spatie\Snapshots\MatchesSnapshots;
 
 class HddvdCueTest extends BaseTestCase
 {
-    use MatchesSnapshots;
-
     /** @test */
     function it_can_parse_a_cue()
     {

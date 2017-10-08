@@ -3,9 +3,13 @@
 namespace SjorsO\Sup\Tests;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Spatie\Snapshots\MatchesSnapshots;
 
 abstract class BaseTestCase extends TestCase
 {
+    use MatchesSnapshots;
+
     public $testFilePath;
 
     public $tempFilesDirectory;
@@ -37,5 +41,10 @@ abstract class BaseTestCase extends TestCase
         foreach($fileNames as $name) {
             unlink($this->tempFilesDirectory . $name);
         }
+    }
+
+    protected function getSnapshotDirectory(): string
+    {
+        return $this->testFilePath.DIRECTORY_SEPARATOR.'__snapshots__';
     }
 }

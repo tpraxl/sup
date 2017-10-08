@@ -8,12 +8,9 @@ use SjorsO\Sup\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Bluray\Sections\TimeSection;
 use SjorsO\Sup\Bluray\SupCue;
-use Spatie\Snapshots\MatchesSnapshots;
 
 class SupCueTest extends BaseTestCase
 {
-    use MatchesSnapshots;
-
     /** @test */
     function it_can_extract_an_image_from_a_basic_sup_cue()
     {

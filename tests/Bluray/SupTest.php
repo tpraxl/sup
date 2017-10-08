@@ -3,12 +3,9 @@
 namespace SjorsO\Sup\Tests;
 
 use SjorsO\Sup\Bluray\Sup;
-use Spatie\Snapshots\MatchesSnapshots;
 
 class SupTest extends BaseTestCase
 {
-    use MatchesSnapshots;
-
     /** @test */
     function it_can_parse_a_full_file()
     {
