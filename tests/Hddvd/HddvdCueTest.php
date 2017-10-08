@@ -23,8 +23,8 @@ class HddvdCueTest extends BaseTestCase
         $this->assertSame(32566, $cue->getStartTime());
         $this->assertSame(36946, $cue->getEndTime());
 
-        $this->assertSame(122, $cue->getWidth(), 'Width is wrong');
-        $this->assertSame(471, $cue->getHeight(), 'Height is wrong');
+        $this->assertSame(123, $cue->getWidth(), 'Width is wrong');
+        $this->assertSame(472, $cue->getHeight(), 'Height is wrong');
 
         $this->assertSame(1655, $cue->getX());
         $this->assertSame(164, $cue->getY());
@@ -47,8 +47,8 @@ class HddvdCueTest extends BaseTestCase
         $this->assertSame(3*60*1000 + 47394, $secondCue->getStartTime());
         $this->assertSame(3*60*1000 + 49567, $secondCue->getEndTime());
 
-        $this->assertSame(121, $secondCue->getWidth());
-        $this->assertSame(436, $secondCue->getHeight());
+        $this->assertSame(122, $secondCue->getWidth());
+        $this->assertSame(437, $secondCue->getHeight());
 
         $this->assertSame(1651, $secondCue->getX());
         $this->assertSame(166, $secondCue->getY());
@@ -68,8 +68,8 @@ class HddvdCueTest extends BaseTestCase
 
         $secondCue = new HddvdSupCue($stream, $filePath);
 
-        $this->assertSame(60, $secondCue->getWidth());
-        $this->assertSame(572, $secondCue->getHeight());
+        $this->assertSame(61, $secondCue->getWidth());
+        $this->assertSame(573, $secondCue->getHeight());
 
         $this->assertSame(1717, $secondCue->getX());
         $this->assertSame(172, $secondCue->getY());
@@ -95,8 +95,8 @@ class HddvdCueTest extends BaseTestCase
         $this->assertSame(24*60*1000 + 12117, $secondCue->getStartTime());
         $this->assertSame(24*60*1000 + 13596, $secondCue->getEndTime());
 
-        $this->assertSame(514, $secondCue->getWidth());
-        $this->assertSame(60, $secondCue->getHeight());
+        $this->assertSame(515, $secondCue->getWidth());
+        $this->assertSame(61, $secondCue->getHeight());
 
         $this->assertSame(710, $secondCue->getX());
         $this->assertSame(890, $secondCue->getY());

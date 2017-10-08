@@ -50,8 +50,7 @@ class HddvdSupCue
 
         $secondSectionPosition = $this->sectionStartPosition + 10 + $stream->uint32();
 
-        // this end position might be wrong
-        $this->imageEvenLinesEndPosition = $secondSectionPosition - 10;
+        $this->imageEvenLinesEndPosition = $secondSectionPosition;
 
         $this->readSection($firstSectionPosition);
 
@@ -66,7 +65,6 @@ class HddvdSupCue
 
         $timeValue = $this->stream->uint16();
 
-        // $nextBlockPosition = $this->stream->uint32le();
         $this->stream->skip(4);
 
         $atEndOfSection = false;
@@ -110,9 +108,9 @@ class HddvdSupCue
                 $bitStream = Bitstream::fromData($this->stream->read(6));
 
                 $this->imageX      = $bitStream->bits(12);
-                $this->imageWidth  = $bitStream->bits(12) - $this->imageX;
+                $this->imageWidth  = $bitStream->bits(12) - $this->imageX + 1;
                 $this->imageY      = $bitStream->bits(12);
-                $this->imageHeight = $bitStream->bits(12) - $this->imageY;
+                $this->imageHeight = $bitStream->bits(12) - $this->imageY + 1;
                 break;
             case "\x86":
                 $this->startImageOddLines  = $this->sectionStartPosition + 10 + $this->stream->uint32();
@@ -127,7 +125,7 @@ class HddvdSupCue
                 // unknown identifier
                 break;
             default:
-                throw new Exception('Unknown block identifier (0x' . bin2hex($identifier) . ' @ ' . $this->stream->position() . ')');
+                throw new Exception('Unknown block identifier (0x'.bin2hex($identifier).' @ '.$this->stream->position().')');
         }
 
         return false;
@@ -135,11 +133,11 @@ class HddvdSupCue
 
     public function extractImage($outputDirectory = './', $outputFileName = 'frame.png')
     {
-        $totalX = $this->getWidth() + 1;
-        $totalY = $this->getHeight() + 1;
+        $totalX = $this->getWidth();
+        $totalY = $this->getHeight();
 
-        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines);//,  ($this->startImageEvenLines - $this->startImageOddLines));
-        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines);//, ($this->imageEvenLinesEndPosition - $this->startImageEvenLines));
+        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines,  ($this->startImageEvenLines - $this->startImageOddLines));
+        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines, ($this->imageEvenLinesEndPosition - $this->startImageEvenLines));
 
         $image = imagecreatetruecolor($totalX , $totalY);
 
@@ -174,10 +172,6 @@ class HddvdSupCue
                 $currentY++;
             }
         }
-
-
-        var_dump($oddLineBitStream->position() . ' / ' . $this->startImageEvenLines);
-        var_dump($evenLineBitStream->position() . ' / ' .  $this->imageEvenLinesEndPosition);
 
         $outputFilePath = rtrim($outputDirectory, '/') . '/' . $outputFileName;
 
