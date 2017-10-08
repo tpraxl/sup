@@ -113,7 +113,6 @@ class HddvdCueTest extends BaseTestCase
 
         $outputFilePath = $cue->extractImage($this->tempFilesDirectory);
 
-        exit;
         $this->assertMatchesFileHashSnapshot($outputFilePath);
     }
 }

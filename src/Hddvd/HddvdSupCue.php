@@ -135,11 +135,11 @@ class HddvdSupCue
 
     public function extractImage($outputDirectory = './', $outputFileName = 'frame.png')
     {
-        $totalX = $this->getWidth();
-        $totalY = $this->getHeight();
+        $totalX = $this->getWidth() + 1;
+        $totalY = $this->getHeight() + 1;
 
-        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines); // , $this->startImageEvenLines
-        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines, $this->imageEvenLinesEndPosition);
+        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines);//,  ($this->startImageEvenLines - $this->startImageOddLines));
+        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines);//, ($this->imageEvenLinesEndPosition - $this->startImageEvenLines));
 
         $image = imagecreatetruecolor($totalX , $totalY);
 
@@ -150,22 +150,26 @@ class HddvdSupCue
 
             for($oddAndEven = 0; $oddAndEven < 2; $oddAndEven++) {
 
-
-                $streamToUse = ($oddAndEven % 1 === 0) ? $oddLineBitStream : $evenLineBitStream;
+                $streamToUse = ($oddAndEven === 0) ? $oddLineBitStream : $evenLineBitStream;
 
                 while($currentX < $totalX) {
 
                     list($colorIndex, $runLength, $toEndOfLine) = $this->getNextColorRunLength($streamToUse);
 
-                    $runLength = $toEndOfLine ? ($totalX - $currentX) : $runLength;
+                    $fillUntilX = $toEndOfLine ? $totalX : $currentX + $runLength;
+
+                    if($fillUntilX > $totalX) {
+                        throw new Exception('Trying to fill beyond end of line (' . $currentX.' + '.$runLength.' = '.($currentX + $runLength).' > '.$totalX.')');
+                    }
 
                     $imageColor = $this->getImageColor($image, $colorIndex);
 
-                    for ($i = 0; $i < $runLength; $i++) {
-                        imagesetpixel($image, $currentX++, $currentY, $imageColor);
+                    for (; $currentX < $fillUntilX; $currentX++) {
+                        imagesetpixel($image, $currentX, $currentY, $imageColor);
                     }
                 }
 
+                $streamToUse->skipToNextByte();
                 $currentX = 0;
                 $currentY++;
             }
@@ -230,13 +234,13 @@ class HddvdSupCue
             return [$colorIndex, $pixelCount, false];
         }
 
-        $pixelCount = $bitStream->bits(7) + 9;
+        $pixelCount = $bitStream->bits(7);
 
-        if ($pixelCount === 9) {
+        if ($pixelCount === 0) {
             return [$colorIndex, $pixelCount, true];
         }
 
-        return [$colorIndex, $pixelCount, false];
+        return [$colorIndex, $pixelCount + 9, false];
     }
 
     protected function getImageColor($image, $colorIndex)

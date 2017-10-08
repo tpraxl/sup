@@ -18,11 +18,7 @@ class BitStream
 
     public function __construct($resource, $start = 0, $totalBytes = null)
     {
-        if (is_resource($resource)) {
-            $this->handle = $resource;
-        } else {
-            $this->handle = fopen($resource, 'rb');
-        }
+        $this->handle = is_resource($resource) ? $resource : fopen($resource, 'rb');
 
         fseek($this->handle, $start);
 
@@ -32,11 +28,10 @@ class BitStream
     protected function readNextByte()
     {
         if($this->totalBytes !== null && ++$this->bytesRead > $this->totalBytes) {
-            throw new Exception('Exceeding data length (read '.$this->bytesRead.' @ '.$this->position().')');
+            throw new Exception('Exceeding data length (read '.$this->bytesRead.' bytes, stream at position '.$this->position().')');
         }
 
-        // as uint8
-        $this->currentByte = unpack('C', fread($this->handle, 1))[1];
+        $this->currentByte = unpack('C', fread($this->handle, 1))[1]; // as uint8
 
         $this->currentBytePosition = 0;
     }
@@ -57,6 +52,10 @@ class BitStream
 
     public function bits($length)
     {
+        if($length < 1) {
+            throw new Exception('Need to read at least 1 bit, tried to read ' . $length);
+        }
+
         $value = 0;
 
         for($i = 0; $i < $length; $i++) {
@@ -64,6 +63,14 @@ class BitStream
         }
 
         return $value;
+    }
+
+    /**
+     * Set pointer to the end of the current byte so the next bit read will come from the next byte.
+     */
+    public function skipToNextByte()
+    {
+        $this->currentBytePosition = 8;
     }
 
     public function position()
