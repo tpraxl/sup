@@ -3,20 +3,24 @@
 namespace SjorsO\Sup\Hddvd;
 
 use Exception;
+use SjorsO\Sup\Streams\BitStream;
 use SjorsO\Sup\Streams\Stream;
 
 class HddvdSupCue
 {
+    protected $filePath;
+
     protected $stream;
 
     protected $sectionStartPosition;
     protected $sectionEndPosition = -1;
 
     protected $startTime;
-    protected $endTimeOffset;
+    protected $endTime;
 
     protected $startImageOddLines;
     protected $startImageEvenLines;
+    protected $imageEvenLinesEndPosition;
 
     protected $colors = [];
 
@@ -28,6 +32,8 @@ class HddvdSupCue
 
     public function __construct(Stream $stream, $filePath)
     {
+        $this->filePath = $filePath;
+
         $this->stream = $stream;
 
         $this->sectionStartPosition = $stream->position();
@@ -43,6 +49,9 @@ class HddvdSupCue
         $firstSectionPosition = $this->sectionStartPosition + 1 + $stream->uint32();
 
         $secondSectionPosition = $this->sectionStartPosition + 10 + $stream->uint32();
+
+        // this end position might be wrong
+        $this->imageEvenLinesEndPosition = $secondSectionPosition - 10;
 
         $this->readSection($firstSectionPosition);
 
@@ -76,18 +85,18 @@ class HddvdSupCue
             case "\x01":
                 break;
             case "\x02":
-                $this->endTimeOffset = $timeValue;
+                $this->endTime = $this->startTime + (int)((($timeValue << 10) + 1023) / 90);
                 break;
             case "\x83":
                 for($i = 0; $i < 768; $i += 3) {
-                    $y  = $this->stream->uint8();
-                    $cb = $this->stream->uint8();
-                    $cr = $this->stream->uint8();
+                    $y  = $this->stream->uint8() - 16;
+                    $cb = $this->stream->uint8() - 128;
+                    $cr = $this->stream->uint8() - 128;
 
                     $this->colors[] = [
-                        $r = max(0, min(255, (int)round(1.1644 * $y + 1.596 * $cr))),
-                        $g = max(0, min(255, (int)round(1.1644 * $y - 0.813 * $cr - 0.391 * $cb))),
-                        $b = max(0, min(255, (int)round(1.1644 * $y + 2.018 * $cb))),
+                        max(0, min(255, (int)round(1.1644 * $y + 1.596 * $cr))), // red
+                        max(0, min(255, (int)round(1.1644 * $y - 0.813 * $cr - 0.391 * $cb))), // green
+                        max(0, min(255, (int)round(1.1644 * $y + 2.018 * $cb))), // blue
                     ];
                 }
                 break;
@@ -98,12 +107,12 @@ class HddvdSupCue
                 }
                 break;
             case "\x85":
-                $bytes = $this->stream->uint8s(6);
-                // values stored per 12 bits
-                $this->imageX      = (($bytes[1] & 0b11110000) >> 4) + ($bytes[0] << 4);
-                $this->imageWidth  = (($bytes[1] & 0b00001111) << 8) + $bytes[2];
-                $this->imageY      = (($bytes[4] & 0b11110000) >> 4) + ($bytes[3] << 4);
-                $this->imageHeight = (($bytes[4] & 0b00001111) << 8) + $bytes[5];
+                $bitStream = Bitstream::fromData($this->stream->read(6));
+
+                $this->imageX      = $bitStream->bits(12);
+                $this->imageWidth  = $bitStream->bits(12) - $this->imageX;
+                $this->imageY      = $bitStream->bits(12);
+                $this->imageHeight = $bitStream->bits(12) - $this->imageY;
                 break;
             case "\x86":
                 $this->startImageOddLines  = $this->sectionStartPosition + 10 + $this->stream->uint32();
@@ -114,6 +123,9 @@ class HddvdSupCue
                     $this->sectionEndPosition = $this->stream->position() + 1;
                 }
                 return true;
+            case "\xc8":
+                // unknown identifier
+                break;
             default:
                 throw new Exception('Unknown block identifier (0x' . bin2hex($identifier) . ' @ ' . $this->stream->position() . ')');
         }
@@ -121,9 +133,63 @@ class HddvdSupCue
         return false;
     }
 
+    public function extractImage($outputDirectory = './', $outputFileName = 'frame.png')
+    {
+        $totalX = $this->getWidth();
+        $totalY = $this->getHeight();
+
+        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines); // , $this->startImageEvenLines
+        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines, $this->imageEvenLinesEndPosition);
+
+        $image = imagecreatetruecolor($totalX , $totalY);
+
+        $currentX = 0;
+        $currentY = 0;
+
+        while($currentY < $totalY) {
+
+            for($oddAndEven = 0; $oddAndEven < 2; $oddAndEven++) {
+
+
+                $streamToUse = ($oddAndEven % 1 === 0) ? $oddLineBitStream : $evenLineBitStream;
+
+                while($currentX < $totalX) {
+
+                    list($colorIndex, $runLength, $toEndOfLine) = $this->getNextColorRunLength($streamToUse);
+
+                    $runLength = $toEndOfLine ? ($totalX - $currentX) : $runLength;
+
+                    $imageColor = $this->getImageColor($image, $colorIndex);
+
+                    for ($i = 0; $i < $runLength; $i++) {
+                        imagesetpixel($image, $currentX++, $currentY, $imageColor);
+                    }
+                }
+
+                $currentX = 0;
+                $currentY++;
+            }
+        }
+
+
+        var_dump($oddLineBitStream->position() . ' / ' . $this->startImageEvenLines);
+        var_dump($evenLineBitStream->position() . ' / ' .  $this->imageEvenLinesEndPosition);
+
+        $outputFilePath = rtrim($outputDirectory, '/') . '/' . $outputFileName;
+
+        imagepng($image, $outputFilePath);
+
+        return $outputFilePath;
+    }
+
     public function getStartTime()
     {
         return $this->startTime;
+    }
+
+    public function getEndTime()
+    {
+        return $this->endTime;
     }
 
     public function getWidth()
@@ -144,5 +210,39 @@ class HddvdSupCue
     public function getY()
     {
         return $this->imageY;
+    }
+
+    protected function getNextColorRunLength(BitStream $bitStream)
+    {
+        $hasRunLength = $bitStream->bool();
+
+        $colorIndex = $bitStream->bool() ? $bitStream->bits(8) : $bitStream->bits(2);
+
+        if (!$hasRunLength) {
+            return [$colorIndex, 1, false];
+        }
+
+        $runLengthSwitch = $bitStream->bool();
+
+        if (!$runLengthSwitch) {
+            $pixelCount = $bitStream->bits(3) + 2;
+
+            return [$colorIndex, $pixelCount, false];
+        }
+
+        $pixelCount = $bitStream->bits(7) + 9;
+
+        if ($pixelCount === 9) {
+            return [$colorIndex, $pixelCount, true];
+        }
+
+        return [$colorIndex, $pixelCount, false];
+    }
+
+    protected function getImageColor($image, $colorIndex)
+    {
+        list($r, $g, $b, $a) = $this->colors[$colorIndex];
+
+        return imagecolorallocatealpha($image, $r, $g, $b, $a);
     }
 }

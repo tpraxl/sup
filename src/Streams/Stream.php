@@ -34,13 +34,6 @@ class Stream
         return unpack('C', $this->read(1))[1];
     }
 
-    public function uint8s($length)
-    {
-        return array_map(function($byte) {
-            return unpack('C', $byte)[1];
-        }, $this->bytes($length));
-    }
-
     public function uint16()
     {
         return unpack('n', $this->read(2))[1];

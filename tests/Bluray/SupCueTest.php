@@ -8,9 +8,12 @@ use SjorsO\Sup\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Bluray\Sections\TimeSection;
 use SjorsO\Sup\Bluray\SupCue;
+use Spatie\Snapshots\MatchesSnapshots;
 
 class SupCueTest extends BaseTestCase
 {
+    use MatchesSnapshots;
+
     /** @test */
     function it_can_extract_an_image_from_a_basic_sup_cue()
     {
@@ -26,7 +29,7 @@ class SupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertSame('7ffd6f08daa1a4d876066135a59feef7ff078a4f', sha1_file($filePath));
+        $this->assertMatchesFileHashSnapshot($filePath);
     }
 
     /** @test */
@@ -44,7 +47,7 @@ class SupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertSame('21178cb42c47aabc42d191e71c34e2dd41a0596d', sha1_file($filePath));
+        $this->assertMatchesFileHashSnapshot($filePath);
     }
 
     /** @test */
@@ -62,6 +65,6 @@ class SupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertSame('98f06187048bdd70b906a6fb35b398d907c9975a', sha1_file($filePath));
+        $this->assertMatchesFileHashSnapshot($filePath);
     }
 }
