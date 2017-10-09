@@ -3,7 +3,7 @@
 namespace SjorsO\Sup\Hddvd;
 
 use Exception;
-use SjorsO\Sup\Streams\BitStream;
+use SjorsO\Bitstream\BitStream;
 use SjorsO\Sup\Streams\Stream;
 
 class HddvdSupCue
@@ -21,6 +21,8 @@ class HddvdSupCue
     protected $startImageOddLines;
     protected $startImageEvenLines;
     protected $imageEvenLinesEndPosition;
+    protected $imageOddLinesDataLength;
+    protected $imageEvenLinesDataLength;
 
     protected $colors = [];
 
@@ -46,20 +48,20 @@ class HddvdSupCue
 
         $stream->skip(6);
 
-        $firstSectionPosition = $this->sectionStartPosition + 1 + $stream->uint32();
+        $firstSequencePosition = $this->sectionStartPosition + 1 + $stream->uint32();
 
-        $secondSectionPosition = $this->sectionStartPosition + 10 + $stream->uint32();
+        $secondSequencePosition = $this->sectionStartPosition + 10 + $stream->uint32();
 
-        $this->imageEvenLinesEndPosition = $secondSectionPosition;
+        $this->imageEvenLinesEndPosition = $secondSequencePosition;
 
-        $this->readSection($firstSectionPosition);
+        $this->readSequence($firstSequencePosition);
 
-        $this->readSection($secondSectionPosition);
+        $this->readSequence($secondSequencePosition);
 
         $this->stream->seek($this->sectionEndPosition);
     }
 
-    protected function readSection($position)
+    protected function readSequence($position)
     {
         $this->stream->seek($position);
 
@@ -115,6 +117,9 @@ class HddvdSupCue
             case "\x86":
                 $this->startImageOddLines  = $this->sectionStartPosition + 10 + $this->stream->uint32();
                 $this->startImageEvenLines = $this->sectionStartPosition + 10 + $this->stream->uint32();
+
+                $this->imageOddLinesDataLength = $this->startImageEvenLines - $this->startImageOddLines;
+                $this->imageEvenLinesDataLength = $this->imageEvenLinesEndPosition - $this->startImageEvenLines;
                 break;
             case "\xff":
                 if($this->stream->position() > $this->sectionEndPosition) {
@@ -136,8 +141,8 @@ class HddvdSupCue
         $totalX = $this->getWidth();
         $totalY = $this->getHeight();
 
-        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines,  ($this->startImageEvenLines - $this->startImageOddLines));
-        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines, ($this->imageEvenLinesEndPosition - $this->startImageEvenLines));
+        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines,  $this->imageOddLinesDataLength);
+        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines, $this->imageEvenLinesDataLength);
 
         $image = imagecreatetruecolor($totalX , $totalY);
 

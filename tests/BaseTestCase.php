@@ -3,7 +3,6 @@
 namespace SjorsO\Sup\Tests;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Spatie\Snapshots\MatchesSnapshots;
 
 abstract class BaseTestCase extends TestCase
