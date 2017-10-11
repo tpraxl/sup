@@ -2,6 +2,7 @@
 
 namespace SjorsO\Sup\Hddvd;
 
+use Closure;
 use Exception;
 use SjorsO\Bitstream\BitStream;
 use SjorsO\Sup\Streams\HddvdRleStream;
@@ -27,7 +28,8 @@ class HddvdSupCue implements SupCueInterface
     protected $imageOddLinesDataLength;
     protected $imageEvenLinesDataLength;
 
-    protected $colors = [];
+    protected $colors;
+    protected $colorAlphas;
 
     protected $imageX;
     protected $imageY;
@@ -96,23 +98,46 @@ class HddvdSupCue implements SupCueInterface
                 $this->endTime = $this->startTime + (int)((($timeValue << 10) + 1023) / 90);
                 break;
             case "\x83":
-                for($i = 0; $i < 768; $i += 3) {
-                    $y  = $this->stream->uint8() - 16;
-                    $cb = $this->stream->uint8() - 128;
-                    $cr = $this->stream->uint8() - 128;
+                $colorData = $this->stream->read(768);
 
-                    $this->colors[] = [
-                        max(0, min(255, (int)round(1.1644 * $y + 1.596 * $cr))), // red
-                        max(0, min(255, (int)round(1.1644 * $y - 0.813 * $cr - 0.391 * $cb))), // green
-                        max(0, min(255, (int)round(1.1644 * $y + 2.018 * $cb))), // blue
-                    ];
-                }
+                $this->colors = function () use ($colorData) {
+                    $colorData = array_map(function($byte) {
+                        return unpack('C', $byte)[1]; // uint8
+                    }, str_split($colorData));
+
+                    $colors = [];
+
+                    for($i = 0; $i < 768; $i += 3) {
+                        $y  = $colorData[$i]   - 16;
+                        $cb = $colorData[$i+1] - 128;
+                        $cr = $colorData[$i+2] - 128;
+
+                        $colors[] = [
+                            max(0, min(255, (int)round(1.1644 * $y + 1.596 * $cr))), // red
+                            max(0, min(255, (int)round(1.1644 * $y - 0.813 * $cr - 0.391 * $cb))), // green
+                            max(0, min(255, (int)round(1.1644 * $y + 2.018 * $cb))), // blue
+                        ];
+                    }
+
+                    return $colors;
+                };
                 break;
             case "\x84":
-                for($i = 0; $i < 256; $i++) {
-                    // alpha: 0 = opaque, 255 = completely transparent
-                    $this->colors[$i][] = (int)floor($this->stream->uint8() / 2);
-                }
+                $alphaData = $this->stream->read(256);
+
+                $this->colorAlphas = function () use ($alphaData) {
+                    $alphaData = array_map(function($byte) {
+                        return unpack('C', $byte)[1]; // uint8
+                    }, str_split($alphaData));
+
+                    $alphas = [];
+
+                    for($i = 0; $i < 256; $i++) {
+                        $alphas[] = (int)floor($alphaData[$i] / 2);
+                    }
+
+                    return $alphas;
+                };
                 break;
             case "\x85":
                 $bitStream = Bitstream::fromData($this->stream->read(6));
@@ -198,6 +223,21 @@ class HddvdSupCue implements SupCueInterface
         return $outputFilePath;
     }
 
+    protected function getImageColor($image, $colorIndex)
+    {
+        if($this->colors instanceof Closure) {
+            $this->colors = ($this->colors)();
+
+            $this->colorAlphas = ($this->colorAlphas)();
+        }
+
+        list($r, $g, $b) = $this->colors[$colorIndex];
+
+        $a = $this->colorAlphas[$colorIndex];
+
+        return imagecolorallocatealpha($image, $r, $g, $b, $a);
+    }
+
     public function setCueIndex($index)
     {
         $this->index = $index;
@@ -238,12 +278,5 @@ class HddvdSupCue implements SupCueInterface
     public function getY()
     {
         return $this->imageY;
-    }
-
-    protected function getImageColor($image, $colorIndex)
-    {
-        list($r, $g, $b, $a) = $this->colors[$colorIndex];
-
-        return imagecolorallocatealpha($image, $r, $g, $b, $a);
     }
 }

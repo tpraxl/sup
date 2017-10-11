@@ -2,7 +2,10 @@
 
 namespace SjorsO\Sup\Tests;
 
+use SjorsO\Sup\Bluray\BluraySup;
+use SjorsO\Sup\Hddvd\HddvdSup;
 use SjorsO\Sup\SupFile;
+use SjorsO\Sup\SupInterface;
 
 class SupFileTest extends BaseTestCase
 {
@@ -20,5 +23,22 @@ class SupFileTest extends BaseTestCase
         $sup = SupFile::open($this->testFilePath.'empty.sup');
 
         $this->assertFalse($sup);
+    }
+
+    /** @test */
+    function it_returns_a_sup_interface()
+    {
+        $sup = SupFile::open($this->testFilePath.'sup-hddvd/01.sup');
+
+        $this->assertTrue($sup instanceof SupInterface);
+
+        $this->assertTrue($sup instanceof HddvdSup);
+
+
+        $anotherSup = SupFile::open($this->testFilePath.'sup-bluray/sup-01-mini.sup');
+
+        $this->assertTrue($anotherSup instanceof SupInterface);
+
+        $this->assertTrue($anotherSup instanceof BluraySup);
     }
 }
