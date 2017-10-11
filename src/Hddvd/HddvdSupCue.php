@@ -4,6 +4,7 @@ namespace SjorsO\Sup\Hddvd;
 
 use Exception;
 use SjorsO\Bitstream\BitStream;
+use SjorsO\Sup\Streams\HddvdRleStream;
 use SjorsO\Sup\Streams\Stream;
 use SjorsO\Sup\SupCueInterface;
 
@@ -148,8 +149,8 @@ class HddvdSupCue implements SupCueInterface
         $totalX = $this->getWidth();
         $totalY = $this->getHeight();
 
-        $oddLineBitStream  = new BitStream($this->filePath, $this->startImageOddLines,  $this->imageOddLinesDataLength);
-        $evenLineBitStream = new BitStream($this->filePath, $this->startImageEvenLines, $this->imageEvenLinesDataLength);
+        $oddLineBitStream  = new HddvdRleStream($this->filePath, $this->startImageOddLines,  $this->imageOddLinesDataLength);
+        $evenLineBitStream = new HddvdRleStream($this->filePath, $this->startImageEvenLines, $this->imageEvenLinesDataLength);
 
         $image = imagecreatetruecolor($totalX , $totalY);
 
@@ -160,26 +161,25 @@ class HddvdSupCue implements SupCueInterface
 
             for($oddAndEven = 0; $oddAndEven < 2; $oddAndEven++) {
 
-                $streamToUse = ($oddAndEven === 0) ? $oddLineBitStream : $evenLineBitStream;
+                $rle = ($oddAndEven === 0) ? $oddLineBitStream : $evenLineBitStream;
 
                 while($currentX < $totalX) {
+                    $rle->nextRun();
 
-                    list($colorIndex, $runLength, $toEndOfLine) = $this->getNextColorRunLength($streamToUse);
-
-                    $fillUntilX = $toEndOfLine ? $totalX : $currentX + $runLength;
+                    $fillUntilX = $rle->toEndOfLine() ? $totalX : $currentX + $rle->runLength();
 
                     if($fillUntilX > $totalX) {
-                        throw new Exception('Trying to fill beyond end of line (' . $currentX.' + '.$runLength.' = '.($currentX + $runLength).' > '.$totalX.')');
+                        throw new Exception('Trying to fill beyond end of line ('.$currentX.' + '.$rle->runLength().' = '.($currentX + $rle->runLength()).' > '.$totalX.')');
                     }
 
-                    $imageColor = $this->getImageColor($image, $colorIndex);
+                    $imageColor = $this->getImageColor($image, $rle->colorIndex());
 
                     for (; $currentX < $fillUntilX; $currentX++) {
                         imagesetpixel($image, $currentX, $currentY, $imageColor);
                     }
                 }
 
-                $streamToUse->skipToNextByte();
+                $rle->skipToNextByte();
                 $currentX = 0;
 
                 if(++$currentY === $totalY) {
@@ -238,33 +238,6 @@ class HddvdSupCue implements SupCueInterface
     public function getY()
     {
         return $this->imageY;
-    }
-
-    protected function getNextColorRunLength(BitStream $bitStream)
-    {
-        $hasRunLength = $bitStream->bool();
-
-        $colorIndex = $bitStream->bool() ? $bitStream->bits(8) : $bitStream->bits(2);
-
-        if (!$hasRunLength) {
-            return [$colorIndex, 1, false];
-        }
-
-        $runLengthSwitch = $bitStream->bool();
-
-        if (!$runLengthSwitch) {
-            $pixelCount = $bitStream->bits(3) + 2;
-
-            return [$colorIndex, $pixelCount, false];
-        }
-
-        $pixelCount = $bitStream->bits(7);
-
-        if ($pixelCount === 0) {
-            return [$colorIndex, $pixelCount, true];
-        }
-
-        return [$colorIndex, $pixelCount + 9, false];
     }
 
     protected function getImageColor($image, $colorIndex)
