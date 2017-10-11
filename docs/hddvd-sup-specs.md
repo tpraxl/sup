@@ -34,7 +34,7 @@ There are 6 different metadata blocks:
 | 0x84       | 256         | color alphas                |
 | 0x85       | 6           | bitmap size and coordinates |
 | 0x86       | 8           | positions of bitmap data    |
-| 0xff       | 0           | end of block                |
+| 0xff       | 0           | end of sequence             |
 
 
 ## Metadata blocks
@@ -80,8 +80,8 @@ int32 startOddLineData;  // actualPosition = sectionStart + startOddLineData  + 
 int32 startEvenLineData; // actualPosition = sectionStart + startEvenLineData + 10
 ```
 
-#### 0xff - End of block
-Indicates the end of this control sequence block.
+#### 0xff - End of sequence
+Indicates the end of this control sequence.
 
 -------------------
 
