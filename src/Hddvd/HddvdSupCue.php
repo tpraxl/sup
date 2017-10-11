@@ -71,9 +71,9 @@ class HddvdSupCue implements SupCueInterface
 
         $this->stream->skip(4);
 
-        $atEndOfSection = false;
+        $atEndOfSection = null;
 
-        while($atEndOfSection === false) {
+        while($atEndOfSection !== true) {
             $atEndOfSection = $this->readBlock($timeValue);
         }
     }
@@ -125,14 +125,16 @@ class HddvdSupCue implements SupCueInterface
                 break;
             case "\xff":
                 if($this->stream->position() > $this->sectionEndPosition) {
-                    $this->sectionEndPosition = $this->stream->position() + 1;
+                    // Cues must always end on an even position, an extra 0xff is added to ensure this
+                    $maybeExtraByte = $this->stream->position() % 2;
+
+                    $this->sectionEndPosition = $this->stream->position() + $maybeExtraByte;
                 }
                 return true;
-            case "\xc8":
-                // unknown identifier
-                break;
             default:
-                throw new Exception('Unknown block identifier (0x'.bin2hex($identifier).' @ '.$this->stream->position().')');
+                break;
+
+                // throw new Exception('Unknown block identifier (0x'.bin2hex($identifier).' @ '.$this->stream->position().')');
         }
 
         return false;
@@ -176,9 +178,15 @@ class HddvdSupCue implements SupCueInterface
 
                 $streamToUse->skipToNextByte();
                 $currentX = 0;
-                $currentY++;
+
+                if(++$currentY === $totalY) {
+                    break;
+                }
             }
         }
+
+        // var_dump("odd line stream  @ {$oddLineBitStream->position()} (should be at: ".($this->startImageOddLines+$this->imageOddLinesDataLength).") (start: {$this->startImageOddLines})");
+        // var_dump("even line stream @ {$evenLineBitStream->position()} (should be at: ".($this->startImageEvenLines+$this->imageEvenLinesDataLength).") (start: {$this->startImageEvenLines})");
 
         $outputFilePath = rtrim($outputDirectory, '/') . '/' . $outputFileName;
 

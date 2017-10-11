@@ -2,11 +2,10 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Hddvd\HddvdSup;
 use SjorsO\Sup\Hddvd\HddvdSupCue;
 use SjorsO\Sup\Streams\Stream;
 
-class HddvdCueTest extends BaseTestCase
+class HddvdSupCueTest extends BaseTestCase
 {
     /** @test */
     function it_can_parse_a_cue()
@@ -74,30 +73,27 @@ class HddvdCueTest extends BaseTestCase
     }
 
     /** @test */
-    function landscape_cue()
+    function problematic_cue()
     {
         $filePath = $this->testFilePath.'/sup-hddvd/01.sup';
 
         $stream = new Stream($filePath);
 
-        new HddvdSupCue($stream, $filePath);
-        new HddvdSupCue($stream, $filePath);
-        new HddvdSupCue($stream, $filePath);
+        for ($i = 0; $i < 22; $i++) {
+            new HddvdSupCue($stream, $filePath);
+        }
+
+        $this->assertSame(283148, $stream->position());
+
         new HddvdSupCue($stream, $filePath);
 
-        $secondCue = new HddvdSupCue($stream, $filePath);
+        $this->assertSame(290360, $stream->position());
 
-        new HddvdSupCue($stream, $filePath);
+        $problematicCue = new HddvdSupCue($stream, $filePath);
 
-        // 00:24:12,117 --> 00:24:13,596
-        $this->assertSame(24*60*1000 + 12117, $secondCue->getStartTime());
-        $this->assertSame(24*60*1000 + 13596, $secondCue->getEndTime());
+        $this->assertSame(311942, $stream->position());
 
-        $this->assertSame(515, $secondCue->getWidth());
-        $this->assertSame(61, $secondCue->getHeight());
 
-        $this->assertSame(710, $secondCue->getX());
-        $this->assertSame(890, $secondCue->getY());
     }
 
     /** @test */
@@ -106,6 +102,39 @@ class HddvdCueTest extends BaseTestCase
         $filePath = $this->testFilePath.'/sup-hddvd/01-section-01.dat';
 
         $stream = new Stream($filePath);
+
+        $cue = new HddvdSupCue($stream, $filePath);
+
+        $outputFilePath = $cue->extractImage($this->tempFilesDirectory);
+
+        $this->assertMatchesFileHashSnapshot($outputFilePath);
+    }
+
+    /** @test */
+    function it_can_extract_the_image_from__cue_2()
+    {
+        $filePath = $this->testFilePath.'/sup-hddvd/01.sup';
+
+        $stream = new Stream($filePath);
+
+        new HddvdSupCue($stream, $filePath);
+
+        $cue = new HddvdSupCue($stream, $filePath);
+
+        $outputFilePath = $cue->extractImage($this->tempFilesDirectory);
+
+        $this->assertMatchesFileHashSnapshot($outputFilePath);
+    }
+
+    /** @test */
+    function it_can_extract_the_image_from__cue_3()
+    {
+        $filePath = $this->testFilePath.'/sup-hddvd/01.sup';
+
+        $stream = new Stream($filePath);
+
+        new HddvdSupCue($stream, $filePath);
+        new HddvdSupCue($stream, $filePath);
 
         $cue = new HddvdSupCue($stream, $filePath);
 

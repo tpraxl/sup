@@ -11,8 +11,8 @@ class HddvdSupTest extends BaseTestCase
     {
         $sup = new HddvdSup($this->testFilePath.'/sup-hddvd/01.sup');
 
-        // $filePaths = $sup->extractImages($this->tempFilesDirectory);
+        $filePaths = $sup->extractImages($this->tempFilesDirectory);
 
-        // exit;
+        exit;
     }
 }
