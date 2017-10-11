@@ -23,6 +23,7 @@ struct ControlSequence
 ```
 
 There are 6 different metadata blocks:
+
 | Identifier | Length      |                             |
 |------------|-------------|-----------------------------|
 |`0x01`      | 0           | start time                  |
