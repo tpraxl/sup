@@ -3,7 +3,7 @@
 namespace SjorsO\Sup;
 
 use Exception;
-use SjorsO\Sup\Bluray\Sup;
+use SjorsO\Sup\Bluray\BluraySup;
 use SjorsO\Sup\Hddvd\HddvdSup;
 
 class SupFile
@@ -31,7 +31,7 @@ class SupFile
 
         switch($identifier)
         {
-            case 'PG': return new Sup($filePath);
+            case 'PG': return new BluraySup($filePath);
             case 'SP': return new HddvdSup($filePath);
         }
 

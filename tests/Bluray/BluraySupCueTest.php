@@ -7,14 +7,14 @@ use SjorsO\Sup\Bluray\Sections\EndSection;
 use SjorsO\Sup\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Bluray\Sections\TimeSection;
-use SjorsO\Sup\Bluray\SupCue;
+use SjorsO\Sup\Bluray\BluraySupCue;
 
-class SupCueTest extends BaseTestCase
+class BluraySupCueTest extends BaseTestCase
 {
     /** @test */
     function it_can_extract_an_image_from_a_basic_sup_cue()
     {
-        $cue = new SupCue();
+        $cue = new BluraySupCue();
 
         $path = $this->testFilePath.'sections/bluray/01';
 
@@ -32,7 +32,7 @@ class SupCueTest extends BaseTestCase
     /** @test */
     function it_can_extract_an_image_from_another_basic_sup_cue()
     {
-        $cue = new SupCue();
+        $cue = new BluraySupCue();
 
         $path = $this->testFilePath.'sections/bluray/02';
 
@@ -50,7 +50,7 @@ class SupCueTest extends BaseTestCase
     /** @test */
     function it_can_extract_an_image_from_yet_another_basic_sup_cue()
     {
-        $cue = new SupCue();
+        $cue = new BluraySupCue();
 
         $path = $this->testFilePath.'sections/bluray/03';
 

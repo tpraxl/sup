@@ -7,11 +7,11 @@ use SjorsO\Sup\Bluray\Sections\EndSection;
 use SjorsO\Sup\Streams\Stream;
 use SjorsO\Sup\SupInterface;
 
-class Sup implements SupInterface
+class BluraySup implements SupInterface
 {
     protected $filePath;
 
-    /** @var SupCue[]  */
+    /** @var BluraySupCue[]  */
     protected $cues = [];
 
     /** @var Stream */
@@ -23,7 +23,7 @@ class Sup implements SupInterface
 
         $this->stream = new Stream($this->filePath);
 
-        /** @var SupCue[] $cues */
+        /** @var BluraySupCue[] $cues */
         $cues = [];
 
         while(($supCue = $this->readCue()) !== false) {
@@ -45,11 +45,11 @@ class Sup implements SupInterface
         $lastCue->setEndTime($lastCue->getStartTime() + 3000);
 
         // Cues without an image are only there to indicate the previous cue should end
-        $cues = array_filter($cues, function(SupCue $cue) {
+        $cues = array_filter($cues, function(BluraySupCue $cue) {
             return $cue->containsImage();
         });
 
-        usort($cues, function(SupCue $a, SupCue $b) {
+        usort($cues, function(BluraySupCue $a, BluraySupCue $b) {
            return $a->getStartTime() <=> $b->getStartTime();
         });
 
@@ -62,7 +62,7 @@ class Sup implements SupInterface
 
     protected function readCue()
     {
-        $cue = new SupCue();
+        $cue = new BluraySupCue();
 
         while(($cueHeader = $this->stream->read(2)) === 'PG') {
 

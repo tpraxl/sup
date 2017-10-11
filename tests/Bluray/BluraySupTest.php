@@ -2,14 +2,14 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sup;
+use SjorsO\Sup\Bluray\BluraySup;
 
-class SupTest extends BaseTestCase
+class BluraySupTest extends BaseTestCase
 {
     /** @test */
     function it_can_parse_a_full_file()
     {
-        $sup = new Sup($this->testFilePath.'sup-bluray/sup-01.sup');
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-01.sup');
 
         $cues = $sup->getCues();
 
@@ -23,7 +23,7 @@ class SupTest extends BaseTestCase
     /** @test */
     function it_can_extract_all_images()
     {
-        $sup = new Sup($this->testFilePath.'sup-bluray/sup-01-mini.sup');
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-01-mini.sup');
 
         $cues = $sup->getCues();
 
@@ -45,7 +45,7 @@ class SupTest extends BaseTestCase
     /** @test */
     function it_fills_cues_with_start_and_end_times()
     {
-        $sup = new Sup($this->testFilePath.'sup-bluray/sup-02-mini.sup');
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-02-mini.sup');
 
         $cues = $sup->getCues();
 
@@ -64,7 +64,7 @@ class SupTest extends BaseTestCase
     /** @test */
     function it_creates_a_cue_manifest()
     {
-        $sup = new Sup($this->testFilePath.'sup-bluray/sup-02-mini.sup');
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-02-mini.sup');
 
         $manifest = $sup->getCueManifest();
 

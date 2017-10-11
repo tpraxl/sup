@@ -8,7 +8,7 @@ use SjorsO\Sup\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Bluray\Sections\TimeSection;
 use SjorsO\Sup\SupCueInterface;
 
-class SupCue implements SupCueInterface
+class BluraySupCue implements SupCueInterface
 {
     protected $cueIndex = 0;
 
