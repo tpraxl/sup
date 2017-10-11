@@ -75,16 +75,20 @@ class Stream
     public function seek($position)
     {
         fseek($this->handle, $position, SEEK_SET);
-    }
 
-    public function position()
-    {
-        return ftell($this->handle);
+        return $this;
     }
 
     public function rewind($length)
     {
         fseek($this->handle, -$length, SEEK_CUR);
+
+        return $this;
+    }
+
+    public function position()
+    {
+        return ftell($this->handle);
     }
 
     protected function assertMaximumPosition($readLength)

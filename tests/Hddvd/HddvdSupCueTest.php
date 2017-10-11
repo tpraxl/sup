@@ -91,9 +91,7 @@ class HddvdSupCueTest extends BaseTestCase
 
         $problematicCue = new HddvdSupCue($stream, $filePath);
 
-        $this->assertSame(311942, $stream->position());
-
-
+        $this->assertSame(299982, $stream->position());
     }
 
     /** @test */

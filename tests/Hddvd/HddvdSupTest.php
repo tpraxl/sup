@@ -13,6 +13,14 @@ class HddvdSupTest extends BaseTestCase
 
         $filePaths = $sup->extractImages($this->tempFilesDirectory);
 
-        exit;
+        $this->assertSame(113, count($filePaths));
+
+        foreach($filePaths as $filePath) {
+            $this->assertFileExists($filePath);
+
+            $this->assertTrue(filesize($filePath) > 512, basename($filePath).' was smaller than 512 bytes');
+        }
+
+        $this->assertMatchesFileHashSnapshot($filePaths[112]);
     }
 }

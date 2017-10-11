@@ -56,6 +56,11 @@ class HddvdSupCue implements SupCueInterface
 
         $this->imageEvenLinesEndPosition = $secondSequencePosition;
 
+        // On some cues the first sequence position is off by 1, not sure why. This hack fixes that.
+        if($this->stream->seek($firstSequencePosition)->rewind(1)->read(1) !== "\xff") {
+            $firstSequencePosition = $firstSequencePosition + 1;
+        }
+
         $this->readSequence($firstSequencePosition);
 
         $this->readSequence($secondSequencePosition);
@@ -132,9 +137,7 @@ class HddvdSupCue implements SupCueInterface
                 }
                 return true;
             default:
-                break;
-
-                // throw new Exception('Unknown block identifier (0x'.bin2hex($identifier).' @ '.$this->stream->position().')');
+                throw new Exception('Unknown block identifier (0x'.bin2hex($identifier).' @ '.$this->stream->position().')');
         }
 
         return false;
