@@ -5,10 +5,12 @@ namespace SjorsO\Sup\Hddvd;
 use Exception;
 use SjorsO\Bitstream\BitStream;
 use SjorsO\Sup\Streams\Stream;
+use SjorsO\Sup\SupCueInterface;
 
-class HddvdSupCue
+class HddvdSupCue implements SupCueInterface
 {
     protected $filePath;
+    protected $index;
 
     protected $stream;
 
@@ -183,6 +185,18 @@ class HddvdSupCue
         imagepng($image, $outputFilePath);
 
         return $outputFilePath;
+    }
+
+    public function setCueIndex($index)
+    {
+        $this->index = $index;
+
+        return $this;
+    }
+
+    public function getCueIndex()
+    {
+        return $this->index;
     }
 
     public function getStartTime()

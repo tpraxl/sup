@@ -2,6 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
+use SjorsO\Sup\Hddvd\HddvdSup;
 use SjorsO\Sup\Hddvd\HddvdSupCue;
 use SjorsO\Sup\Streams\Stream;
 

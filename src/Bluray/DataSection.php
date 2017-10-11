@@ -43,7 +43,7 @@ abstract class DataSection
         $stream = new Stream($this->filePath, $this->startPosition, $this->endPosition);
 
         if($stream->read(2) !== 'PG') {
-            throw new Exception('Invalid section header (' . basename($this->filePath) . " @ {$this->startPosition})");
+            throw new Exception('Invalid section header ('.basename($this->filePath)." @ {$this->startPosition})");
         }
 
         $this->firstHeaderInt = $stream->uint32() / 90;

@@ -6,8 +6,9 @@ use Exception;
 use SjorsO\Sup\Bluray\Sections\BitmapSection;
 use SjorsO\Sup\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Bluray\Sections\TimeSection;
+use SjorsO\Sup\SupCueInterface;
 
-class SupCue
+class SupCue implements SupCueInterface
 {
     protected $cueIndex = 0;
 
@@ -27,7 +28,7 @@ class SupCue
         return $this;
     }
 
-    public function getIndex()
+    public function getCueIndex()
     {
         return $this->cueIndex;
     }
@@ -113,7 +114,7 @@ class SupCue
         $paletteSection = $this->getPaletteSection();
 
         if(count($bitmapSections) !== 1) {
-            throw new \Exception('Not implemented yet, more than one bitmap section');
+            throw new Exception('Not implemented yet, more than one bitmap section');
         }
 
         $bitmapSection = $bitmapSections[0];

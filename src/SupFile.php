@@ -12,6 +12,11 @@ class SupFile
     {
     }
 
+    /**
+     * @param $filePath
+     * @return SupInterface|bool
+     * @throws Exception
+     */
     public static function open($filePath)
     {
         if(! file_exists($filePath)) {

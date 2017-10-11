@@ -5,8 +5,9 @@ namespace SjorsO\Sup\Bluray;
 use Exception;
 use SjorsO\Sup\Bluray\Sections\EndSection;
 use SjorsO\Sup\Streams\Stream;
+use SjorsO\Sup\SupInterface;
 
-class Sup
+class Sup implements SupInterface
 {
     protected $filePath;
 
@@ -93,7 +94,7 @@ class Sup
         $extractedFilePaths = [];
 
         foreach($this->cues as $cue) {
-            $fileName = str_replace('%d', str_pad($cue->getIndex(), 5, '0', STR_PAD_LEFT), $fileNameTemplate);
+            $fileName = str_replace('%d', str_pad($cue->getCueIndex(), 5, '0', STR_PAD_LEFT), $fileNameTemplate);
 
             $extractedFilePaths[] = $cue->extractImage($outputDirectory, $fileName);
         }
@@ -112,7 +113,7 @@ class Sup
 
         foreach($this->cues as $cue) {
             $manifest[] = [
-                'index' => $cue->getIndex(),
+                'index' => $cue->getCueIndex(),
                 'startTime' => $cue->getStartTime(),
                 'endTime' => $cue->getEndTime(),
             ];
