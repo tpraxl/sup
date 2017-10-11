@@ -1,24 +1,24 @@
 # HD-DVD Specs
 A HD-DVD sup is made up out of sections. Each section starts with 20 bytes of header data:
-```
+```C#
 struct SectionHeader
 {
-   char[2] identifier = {'S', 'P'};
-   int32 startTimeMilliseconds; //little endian
-   int32 unknown1;
-   int16 unknown2;
-   int32 firstSequencePosition;  // actualPosition = sectionStartPosition + firstSequencePosition  + 1
-   int32 secondSequencePosition; // actualPosition = sectionStartPosition + secondSequencePosition + 10   
+     char[2] identifier = {'S', 'P'};
+     int32 startTimeMilliseconds; //little endian
+     int32 unknown1;
+     int16 unknown2;
+     int32 firstSequencePosition;  // actualPosition = sectionStartPosition + firstSequencePosition  + 1
+     int32 secondSequencePosition; // actualPosition = sectionStartPosition + secondSequencePosition + 10   
 }
 ```
 
 Both sequence positions in the header point to a control sequence:
-```
+```C#
 struct ControlSequence
 {
-  int16 endTime;
-  int32 nextSequencePosition;
-  MetadataBlock[] metadataBlocks;
+    int16 endTime;
+    int32 nextSequencePosition;
+    MetadataBlock[] metadataBlocks;
 }
 ```
 
@@ -26,13 +26,13 @@ There are 6 different metadata blocks:
 
 | Identifier | Length      |                             |
 |------------|-------------|-----------------------------|
-|`0x01`      | 0           | start time                  |
-|`0x02`      | 0           | end time                    |
-|`0x83`      | 768         | colors                      |
-|`0x84`      | 256         | color alphas                |
-|`0x85`      | 6           | bitmap size and coordinates |
-|`0x86`      | 8           | positions of bitmap data    |
-|`0xff`      | 0           | end of block                |
+| 0x01       | 0           | start time                  |
+| 0x02       | 0           | end time                    |
+| 0x83       | 768         | colors                      |
+| 0x84       | 256         | color alphas                |
+| 0x85       | 6           | bitmap size and coordinates |
+| 0x86       | 8           | positions of bitmap data    |
+| 0xff       | 0           | end of block                |
 
 
 ## Metadata blocks
@@ -50,13 +50,13 @@ If this block is present in a control sequence, then the endTime value from the 
 This block contains the color palette of the subtitle in 256 entries of 3 bytes each in YCbCr format.
 
 ```
-  y = read_one_byte() - 16;
-  cb = read_one_byte() - 128;
-  cr = read_one_byte() - 128;
-  
-  r = min(0, max(255, round(1.1644 * y + 1.596 * cr)));
-  g = min(0, max(255, round(1.1644 * y - 0.813 * cr - 0.391 * cb)));
-  b = min(0, max(255, round(1.1644 * y + 2.018 * cb)));
+y = read_one_byte() - 16;
+cb = read_one_byte() - 128;
+cr = read_one_byte() - 128;
+ 
+r = min(0, max(255, round(1.1644 * y + 1.596 * cr)));
+g = min(0, max(255, round(1.1644 * y - 0.813 * cr - 0.391 * cb)));
+b = min(0, max(255, round(1.1644 * y + 2.018 * cb)));
 ```
 
 #### 0x84 - Color alphas
@@ -65,17 +65,17 @@ Contains the alpha values for each color from the colors section. 0x00 is opaque
 #### 0x85 - Bitmap size and coordinates
 Contains 6 bytes, it should be read as four 12 bit integers.
 ```
-  int12 x1;
-  int12 x2; // bitmap width = x2 - x1 + 1
-  int12 y1;
-  int12 y2; // bitmap height = y2 - y1 + 1
+int12 x1;
+int12 x2; // bitmap width = x2 - x1 + 1
+int12 y1;
+int12 y2; // bitmap height = y2 - y1 + 1
 ```
 
 #### 0x86 - Positions of bitmap data
 Contains two pointers to the bitmap data of the subtitle. The first one points to the start of the odd lines, the second to the start of the even lines.
 ```
-	int32 startOddLineData;  // actualPosition = sectionStart + startOddLineData  + 10
-	int32 startEvenLineData; // actualPosition = sectionStart + startEvenLineData + 10
+int32 startOddLineData;  // actualPosition = sectionStart + startOddLineData  + 10
+int32 startEvenLineData; // actualPosition = sectionStart + startEvenLineData + 10
 ```
 
 #### 0xff - End of block
@@ -125,7 +125,7 @@ while (y < bitmap_height)
             number_of_pixels = 1;
         }
         
-        append_pixels(color, number_of_pixels);
+        append_pixels(colors[colorIndex], number_of_pixels);
         
         x = x + number_of_pixels;
     }
