@@ -4,7 +4,7 @@ namespace SjorsO\Sup\Bluray\Sections;
 
 use Exception;
 use SjorsO\Sup\Bluray\DataSection;
-use SjorsO\Sup\Streams\RleStream;
+use SjorsO\Sup\Streams\BlurayRleStream;
 use SjorsO\Sup\Streams\Stream;
 
 class BitmapSection extends DataSection
@@ -104,7 +104,7 @@ class BitmapSection extends DataSection
 
         rewind($memoryHandle);
 
-        return new RleStream($memoryHandle, 0, $this->bitmapLength);
+        return new BlurayRleStream($memoryHandle, 0, $this->bitmapLength);
     }
 
     public function getWidth()

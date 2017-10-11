@@ -23,10 +23,6 @@ class SupFile
             throw new Exception('File does not exist');
         }
 
-        if(filesize($filePath) < 2) {
-            return false;
-        }
-
         $handle = fopen($filePath, 'rb');
 
         $identifier = fread($handle, 2);

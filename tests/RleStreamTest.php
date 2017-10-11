@@ -3,7 +3,7 @@
 namespace SjorsO\Sup\Tests;
 
 use Exception;
-use SjorsO\Sup\Streams\RleStream;
+use SjorsO\Sup\Streams\BlurayRleStream;
 
 class RleStreamTest extends BaseTestCase
 {
@@ -22,7 +22,7 @@ class RleStreamTest extends BaseTestCase
     {
         $resource = $this->createResource($data);
 
-        $stream = new RleStream($resource, 0, strlen($data));
+        $stream = new BlurayRleStream($resource, 0, strlen($data));
 
         $info = $stream->readNext();
 
@@ -68,7 +68,7 @@ class RleStreamTest extends BaseTestCase
 
         $resource = $this->createResource("\x10");
 
-        $stream = new RleStream($resource, 0, 1);
+        $stream = new BlurayRleStream($resource, 0, 1);
 
         $stream->readNext();
         $stream->readNext();

@@ -16,7 +16,7 @@ class SupCueTest extends BaseTestCase
     {
         $cue = new SupCue();
 
-        $path = $this->testFilePath.'/sections/bluray/01';
+        $path = $this->testFilePath.'sections/bluray/01';
 
         $cue->addSection(new TimeSection($path.'-time-section.dat'));
         $cue->addSection(new FrameSection($path.'-frame-section.dat'));
@@ -34,7 +34,7 @@ class SupCueTest extends BaseTestCase
     {
         $cue = new SupCue();
 
-        $path = $this->testFilePath.'/sections/bluray/02';
+        $path = $this->testFilePath.'sections/bluray/02';
 
         $cue->addSection(new TimeSection($path.'-time-section.dat'));
         $cue->addSection(new FrameSection($path.'-frame-section.dat'));
@@ -52,7 +52,7 @@ class SupCueTest extends BaseTestCase
     {
         $cue = new SupCue();
 
-        $path = $this->testFilePath.'/sections/bluray/03';
+        $path = $this->testFilePath.'sections/bluray/03';
 
         $cue->addSection(new TimeSection($path.'-time-section.dat'));
         $cue->addSection(new FrameSection($path.'-frame-section.dat'));

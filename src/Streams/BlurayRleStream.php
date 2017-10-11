@@ -4,7 +4,7 @@ namespace SjorsO\Sup\Streams;
 
 use Exception;
 
-class RleStream
+class BlurayRleStream
 {
     protected $handle;
 
@@ -14,12 +14,7 @@ class RleStream
 
     public function __construct($resource, $start, $dataLength)
     {
-        if(is_resource($resource)) {
-            $this->handle = $resource;
-        }
-        else {
-            $this->handle = fopen($resource, 'rb');
-        }
+        $this->handle = is_resource($resource) ? $resource : fopen($resource, 'rb');
 
         fseek($this->handle, $start);
 

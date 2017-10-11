@@ -9,7 +9,7 @@ class BitmapSectionTest extends BaseTestCase
     /** @test */
     function it_can_read_from_a_bitmap_sections()
     {
-        $filePath = $this->testFilePath.'/sections/bluray/01-bitmap-section.dat';
+        $filePath = $this->testFilePath.'sections/bluray/01-bitmap-section.dat';
 
         $section = new BitmapSection($filePath);
 

@@ -10,7 +10,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function it_can_parse_a_cue()
     {
-        $filePath = $this->testFilePath.'/sup-hddvd/01-section-01.dat';
+        $filePath = $this->testFilePath.'sup-hddvd/01-section-01.dat';
 
         $stream = new Stream($filePath);
 
@@ -32,7 +32,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function it_can_parse_the_second_cue()
     {
-        $filePath = $this->testFilePath.'/sup-hddvd/01-section-01+02.dat';
+        $filePath = $this->testFilePath.'sup-hddvd/01-section-01+02.dat';
 
         $stream = new Stream($filePath);
 
@@ -56,7 +56,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function slim_vertical_cue()
     {
-        $filePath = $this->testFilePath . '/sup-hddvd/01.sup';
+        $filePath = $this->testFilePath.'sup-hddvd/01.sup';
 
         $stream = new Stream($filePath);
 
@@ -75,7 +75,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function problematic_cue()
     {
-        $filePath = $this->testFilePath.'/sup-hddvd/01.sup';
+        $filePath = $this->testFilePath.'sup-hddvd/01.sup';
 
         $stream = new Stream($filePath);
 
@@ -101,7 +101,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function it_can_extract_the_image_from_a_cue()
     {
-        $filePath = $this->testFilePath.'/sup-hddvd/01-section-01.dat';
+        $filePath = $this->testFilePath.'sup-hddvd/01-section-01.dat';
 
         $stream = new Stream($filePath);
 
@@ -115,7 +115,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function it_can_extract_the_image_from__cue_2()
     {
-        $filePath = $this->testFilePath.'/sup-hddvd/01.sup';
+        $filePath = $this->testFilePath.'sup-hddvd/01.sup';
 
         $stream = new Stream($filePath);
 
@@ -131,7 +131,7 @@ class HddvdSupCueTest extends BaseTestCase
     /** @test */
     function it_can_extract_the_image_from__cue_3()
     {
-        $filePath = $this->testFilePath.'/sup-hddvd/01.sup';
+        $filePath = $this->testFilePath.'sup-hddvd/01.sup';
 
         $stream = new Stream($filePath);
 

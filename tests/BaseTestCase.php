@@ -17,9 +17,9 @@ abstract class BaseTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->testFilePath = __DIR__ . '/files';
+        $this->testFilePath = __DIR__.'/files/';
 
-        $this->tempFilesDirectory = $this->testFilePath . '/temp/';
+        $this->tempFilesDirectory = $this->testFilePath.'temp/';
     }
 
     protected function tearDown()
@@ -44,6 +44,6 @@ abstract class BaseTestCase extends TestCase
 
     protected function getSnapshotDirectory(): string
     {
-        return $this->testFilePath.DIRECTORY_SEPARATOR.'__snapshots__';
+        return $this->testFilePath.'__snapshots__';
     }
 }

@@ -9,7 +9,7 @@ class PaletteSectionTest extends BaseTestCase
     /** @test */
     function it_can_read_palette_entries_from_a_palette_section()
     {
-        $filePath = $this->testFilePath.'/sections/bluray/01-palette-section.dat';
+        $filePath = $this->testFilePath.'sections/bluray/01-palette-section.dat';
 
         $section = new PaletteSection($filePath);
 

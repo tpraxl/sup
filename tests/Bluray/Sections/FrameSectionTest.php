@@ -9,7 +9,7 @@ class FrameSectionTest extends BaseTestCase
     /** @test */
     function it_can_read_a_section_with_one_frame()
     {
-        $filePath = $this->testFilePath.'/sections/bluray/01-frame-section.dat';
+        $filePath = $this->testFilePath.'sections/bluray/01-frame-section.dat';
 
         $section = new FrameSection($filePath);
 
