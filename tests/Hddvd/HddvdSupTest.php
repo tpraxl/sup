@@ -23,4 +23,13 @@ class HddvdSupTest extends BaseTestCase
 
         $this->assertMatchesFileHashSnapshot($filePaths[112]);
     }
+
+//    /** @test */
+//    function it_can_extract_all_images_from_a_different_hddvd_sup()
+//    {
+//        $sup = new HddvdSup($this->testFilePath.'/sup-hddvd/02.sup');
+//
+//        $filePaths = $sup->extractImages($this->tempFilesDirectory);
+//
+//    }
 }

@@ -1,4 +1,6 @@
 # HD-DVD Specs
+This file describes the specs of a HD-DVD sup file. Some small (but important) details are not described here, you can look them up in the source code.
+ 
 A HD-DVD sup is made up out of sections. Each section starts with 20 bytes of header data:
 ```C#
 struct SectionHeader

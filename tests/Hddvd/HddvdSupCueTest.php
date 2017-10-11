@@ -91,6 +91,10 @@ class HddvdSupCueTest extends BaseTestCase
 
         $problematicCue = new HddvdSupCue($stream, $filePath);
 
+        $outputFilePath = $problematicCue->extractImage($this->tempFilesDirectory);
+
+        $this->assertMatchesFileHashSnapshot($outputFilePath);
+
         $this->assertSame(299982, $stream->position());
     }
 
