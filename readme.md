@@ -16,6 +16,7 @@ $imageFilePaths = $sup->extractImages('/path/to/output/directory/');
 ```
 
 Extracted images usually look something like this:
+
 ![example japanese cue](https://i.imgur.com/pC3cAIG.png)
 
 ![example arabic cue](https://i.imgur.com/3Qyvqnk.png)
