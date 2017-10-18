@@ -6,7 +6,7 @@ use SjorsO\Sup\Formats\Bluray\BluraySup;
 use SjorsO\Sup\Formats\Dvd\DvdSup;
 use SjorsO\Sup\Formats\Hddvd\HddvdSup;
 use SjorsO\Sup\SupFile;
-use SjorsO\Sup\SupInterface;
+use SjorsO\Sup\Formats\SupInterface;
 
 class SupFileTest extends BaseTestCase
 {

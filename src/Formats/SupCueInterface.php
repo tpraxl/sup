@@ -1,6 +1,6 @@
 <?php
 
-namespace SjorsO\Sup;
+namespace SjorsO\Sup\Formats;
 
 interface SupCueInterface
 {

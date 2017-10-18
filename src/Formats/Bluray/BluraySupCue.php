@@ -6,7 +6,7 @@ use Exception;
 use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
 use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Formats\Bluray\Sections\TimeSection;
-use SjorsO\Sup\SupCueInterface;
+use SjorsO\Sup\Formats\SupCueInterface;
 
 class BluraySupCue implements SupCueInterface
 {

@@ -7,7 +7,7 @@ use Exception;
 use SjorsO\Bitstream\BitStream;
 use SjorsO\Sup\Streams\HddvdRleStream;
 use SjorsO\Sup\Streams\Stream;
-use SjorsO\Sup\SupCueInterface;
+use SjorsO\Sup\Formats\SupCueInterface;
 
 class HddvdSupCue implements SupCueInterface
 {

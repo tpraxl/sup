@@ -6,7 +6,7 @@ use Exception;
 use SjorsO\Bitstream\BitStream;
 use SjorsO\Sup\Streams\DvdRleStream;
 use SjorsO\Sup\Streams\Stream;
-use SjorsO\Sup\SupCueInterface;
+use SjorsO\Sup\Formats\SupCueInterface;
 
 class DvdSupCue implements SupCueInterface
 {

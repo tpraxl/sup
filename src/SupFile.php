@@ -6,6 +6,7 @@ use Exception;
 use SjorsO\Sup\Formats\Bluray\BluraySup;
 use SjorsO\Sup\Formats\Dvd\DvdSup;
 use SjorsO\Sup\Formats\Hddvd\HddvdSup;
+use SjorsO\Sup\Formats\SupInterface;
 
 class SupFile
 {
