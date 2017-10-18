@@ -5,7 +5,8 @@
     "homepage": "https://github.com/SjorsO/sup",
     "keywords": [
         "subtitles",
-        "sup"
+        "sup",
+        "subpicture"
     ],
     "authors": [
         {
@@ -33,9 +34,9 @@
     },
     "extra": {
         "laravel": {
-            "providers": [
-                "SjorsO\\Sup\\Providers\\SupProvider"
-            ]
+            "aliases": {
+                "Sup": "SjorsO\\Sup\\Facades\\Sup"
+            }
         }
     }
 }
