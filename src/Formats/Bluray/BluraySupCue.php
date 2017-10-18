@@ -114,7 +114,7 @@ class BluraySupCue implements SupCueInterface
         $paletteSection = $this->getPaletteSection();
 
         if(count($bitmapSections) !== 1) {
-            throw new Exception('Not implemented yet, more than one bitmap section');
+            throw new Exception('more than one bitmap section is not implemented yet');
         }
 
         $bitmapSection = $bitmapSections[0];
@@ -130,11 +130,11 @@ class BluraySupCue implements SupCueInterface
         $currentY = 0;
 
         while($currentY < $totalY) {
-            list($paletteIndex, $runLength, $toEndOfLine) = array_values($stream->readNext());
+            $stream->nextRun();
 
-            $color = $paletteSection->getImageColor($paletteIndex, $image);
+            $color = $paletteSection->getImageColor($stream->colorIndex(), $image);
 
-            $fillUntilX = $toEndOfLine ? $totalX : ($currentX + $runLength);
+            $fillUntilX = $stream->toEndOfLine() ? $totalX : ($currentX + $stream->runLength());
 
             if($fillUntilX > $totalX) {
                 throw new Exception('Trying to fill beyond end of line');
@@ -144,7 +144,7 @@ class BluraySupCue implements SupCueInterface
                 imagesetpixel($image, $currentX, $currentY, $color);
             }
 
-            if($toEndOfLine) {
+            if($stream->toEndOfLine()) {
                 $currentX = 0;
                 $currentY++;
             }
