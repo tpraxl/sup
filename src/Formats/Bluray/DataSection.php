@@ -1,6 +1,6 @@
 <?php
 
-namespace SjorsO\Sup\Bluray;
+namespace SjorsO\Sup\Formats\Bluray;
 
 use Exception;
 use SjorsO\Sup\Streams\Stream;

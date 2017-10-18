@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sections\EndSection;
+use SjorsO\Sup\Formats\Bluray\Sections\EndSection;
 
 class EndSectionTest extends BaseTestCase
 {

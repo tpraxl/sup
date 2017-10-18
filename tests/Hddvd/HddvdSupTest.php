@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Hddvd\HddvdSup;
+use SjorsO\Sup\Formats\Hddvd\HddvdSup;
 
 class HddvdSupTest extends BaseTestCase
 {

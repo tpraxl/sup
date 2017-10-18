@@ -2,12 +2,12 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sections\BitmapSection;
-use SjorsO\Sup\Bluray\Sections\EndSection;
-use SjorsO\Sup\Bluray\Sections\FrameSection;
-use SjorsO\Sup\Bluray\Sections\PaletteSection;
-use SjorsO\Sup\Bluray\Sections\TimeSection;
-use SjorsO\Sup\Bluray\BluraySupCue;
+use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
+use SjorsO\Sup\Formats\Bluray\Sections\EndSection;
+use SjorsO\Sup\Formats\Bluray\Sections\FrameSection;
+use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
+use SjorsO\Sup\Formats\Bluray\Sections\TimeSection;
+use SjorsO\Sup\Formats\Bluray\BluraySupCue;
 
 class BluraySupCueTest extends BaseTestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace SjorsO\Sup\Bluray;
+namespace SjorsO\Sup\Formats\Bluray;
 
 use Exception;
-use SjorsO\Sup\Bluray\Sections\BitmapSection;
-use SjorsO\Sup\Bluray\Sections\EndSection;
-use SjorsO\Sup\Bluray\Sections\FrameSection;
-use SjorsO\Sup\Bluray\Sections\PaletteSection;
-use SjorsO\Sup\Bluray\Sections\TimeSection;
+use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
+use SjorsO\Sup\Formats\Bluray\Sections\EndSection;
+use SjorsO\Sup\Formats\Bluray\Sections\FrameSection;
+use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
+use SjorsO\Sup\Formats\Bluray\Sections\TimeSection;
 use SjorsO\Sup\Streams\Stream;
 
 class BluraySection

@@ -1,16 +1,17 @@
 <?php
 
-namespace SjorsO\Sup\Hddvd;
+namespace SjorsO\Sup\Formats\Bluray;
 
 use Exception;
+use SjorsO\Sup\Formats\Bluray\Sections\EndSection;
 use SjorsO\Sup\Streams\Stream;
 use SjorsO\Sup\SupInterface;
 
-class HddvdSup implements SupInterface
+class BluraySup implements SupInterface
 {
     protected $filePath;
 
-    /** @var HddvdSupCue[]  */
+    /** @var BluraySupCue[]  */
     protected $cues = [];
 
     /** @var Stream */
@@ -22,19 +23,34 @@ class HddvdSup implements SupInterface
 
         $this->stream = new Stream($this->filePath);
 
-        /** @var HddvdSupCue[] $cues */
+        /** @var BluraySupCue[] $cues */
         $cues = [];
 
-        while(($cueHeader = $this->stream->read(2)) === 'SP') {
-            $this->stream->rewind(2);
-
-            $cue = new HddvdSupCue($this->stream, $this->filePath);
-
-            $cues[] = $cue;
+        while(($supCue = $this->readCue()) !== false) {
+            $cues[] = $supCue;
         }
 
-        usort($cues, function(HddvdSupCue $a, HddvdSupCue $b) {
-            return $a->getStartTime() <=> $b->getStartTime();
+        if(count($cues) === 0) {
+            return;
+        }
+
+        for($i = 1; $i < count($cues); $i++) {
+            $previousCue = $cues[$i - 1];
+
+            $previousCue->setEndTime($cues[$i]->getStartTime());
+        }
+
+        $lastCue = $cues[count($cues) - 1];
+
+        $lastCue->setEndTime($lastCue->getStartTime() + 3000);
+
+        // Cues without an image are only there to indicate the previous cue should end
+        $cues = array_filter($cues, function(BluraySupCue $cue) {
+            return $cue->containsImage();
+        });
+
+        usort($cues, function(BluraySupCue $a, BluraySupCue $b) {
+           return $a->getStartTime() <=> $b->getStartTime();
         });
 
         for($cueIndex = 0; $cueIndex < count($cues); $cueIndex++) {
@@ -42,6 +58,31 @@ class HddvdSup implements SupInterface
         }
 
         $this->cues = $cues;
+    }
+
+    protected function readCue()
+    {
+        $cue = new BluraySupCue();
+
+        while(($cueHeader = $this->stream->read(2)) === 'PG') {
+
+            $section = BluraySection::get($this->stream, $this->filePath);
+
+            $cue->addSection($section);
+
+            if($section instanceof EndSection) {
+                break;
+            }
+        }
+
+       //$section->exportDataSection(__DIR__ . '/' . $this->stream->position());
+       //exit;
+
+        if($cueHeader !== 'PG') {
+            return false;
+        }
+
+        return $cue;
     }
 
     public function extractImages($outputDirectory = './', $fileNameTemplate = 'frame-%d.png')

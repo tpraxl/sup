@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Hddvd\HddvdSupCue;
+use SjorsO\Sup\Formats\Hddvd\HddvdSupCue;
 use SjorsO\Sup\Streams\Stream;
 
 class HddvdSupCueTest extends BaseTestCase

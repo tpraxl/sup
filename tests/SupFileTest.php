@@ -2,9 +2,9 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\BluraySup;
+use SjorsO\Sup\Formats\Bluray\BluraySup;
 use SjorsO\Sup\Formats\Dvd\DvdSup;
-use SjorsO\Sup\Hddvd\HddvdSup;
+use SjorsO\Sup\Formats\Hddvd\HddvdSup;
 use SjorsO\Sup\SupFile;
 use SjorsO\Sup\SupInterface;
 

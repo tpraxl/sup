@@ -1,6 +1,6 @@
 <?php
 
-namespace SjorsO\Sup\Hddvd;
+namespace SjorsO\Sup\Formats\Hddvd;
 
 use Closure;
 use Exception;

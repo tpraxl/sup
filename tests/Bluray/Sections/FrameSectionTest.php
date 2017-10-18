@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sections\FrameSection;
+use SjorsO\Sup\Formats\Bluray\Sections\FrameSection;
 
 class FrameSectionTest extends BaseTestCase
 {

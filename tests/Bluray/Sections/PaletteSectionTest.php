@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sections\PaletteSection;
+use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
 
 class PaletteSectionTest extends BaseTestCase
 {

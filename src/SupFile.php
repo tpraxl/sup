@@ -3,9 +3,9 @@
 namespace SjorsO\Sup;
 
 use Exception;
-use SjorsO\Sup\Bluray\BluraySup;
+use SjorsO\Sup\Formats\Bluray\BluraySup;
 use SjorsO\Sup\Formats\Dvd\DvdSup;
-use SjorsO\Sup\Hddvd\HddvdSup;
+use SjorsO\Sup\Formats\Hddvd\HddvdSup;
 
 class SupFile
 {

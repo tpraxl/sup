@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sections\TimeSection;
+use SjorsO\Sup\Formats\Bluray\Sections\TimeSection;
 
 class TimeSectionTest extends BaseTestCase
 {

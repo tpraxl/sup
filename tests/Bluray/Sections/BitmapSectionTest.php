@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\Sections\BitmapSection;
+use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
 
 class BitmapSectionTest extends BaseTestCase
 {

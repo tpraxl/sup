@@ -1,9 +1,9 @@
 <?php
 
-namespace SjorsO\Sup\Bluray\Sections;
+namespace SjorsO\Sup\Formats\Bluray\Sections;
 
 use Exception;
-use SjorsO\Sup\Bluray\DataSection;
+use SjorsO\Sup\Formats\Bluray\DataSection;
 use SjorsO\Sup\Streams\Stream;
 
 class TimeSection extends DataSection

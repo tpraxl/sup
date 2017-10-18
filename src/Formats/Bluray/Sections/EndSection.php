@@ -1,8 +1,8 @@
 <?php
 
-namespace SjorsO\Sup\Bluray\Sections;
+namespace SjorsO\Sup\Formats\Bluray\Sections;
 
-use SjorsO\Sup\Bluray\DataSection;
+use SjorsO\Sup\Formats\Bluray\DataSection;
 use SjorsO\Sup\Streams\Stream;
 
 class EndSection extends DataSection

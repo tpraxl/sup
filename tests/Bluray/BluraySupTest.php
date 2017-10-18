@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Tests;
 
-use SjorsO\Sup\Bluray\BluraySup;
+use SjorsO\Sup\Formats\Bluray\BluraySup;
 
 class BluraySupTest extends BaseTestCase
 {
