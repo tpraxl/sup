@@ -7,14 +7,17 @@ use SjorsO\Sup\Streams\Stream;
 
 class DvdSupCueTest extends BaseTestCase
 {
+    private function makeDvdSupCue($filePath)
+    {
+        $stream = new Stream($filePath);
+
+        return new DvdSupCue($stream, $filePath);
+    }
+
     /** @test */
     function it_can_parse_a_cue()
     {
-        $filePath = $this->testFilePath.'sup-dvd/01-section-01.dat';
-
-        $stream = new Stream($filePath);
-
-        $cue = new DvdSupCue($stream, $filePath);
+        $cue = $this->makeDvdSupCue($this->testFilePath.'sup-dvd/01-section-01.dat');
 
         // 01:34:50,184 --> 01:34:56,181
         $this->assertSame(5690185, $cue->getStartTime());
@@ -25,22 +28,26 @@ class DvdSupCueTest extends BaseTestCase
 
         $this->assertSame(0, $cue->getX());
         $this->assertSame(2, $cue->getY());
-
-        $this->assertSame(4166, $stream->position());
     }
 
     /** @test */
     function it_can_extract_an_image()
     {
-        $filePath = $this->testFilePath.'sup-dvd/01-section-01.dat';
-
-        $stream = new Stream($filePath);
-
-        $cue = new DvdSupCue($stream, $filePath);
+        $cue = $this->makeDvdSupCue($this->testFilePath.'sup-dvd/01-section-01.dat');
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        exit;
+        $this->assertMatchesFileHashSnapshot($filePath);
+    }
+
+    /** @test */
+    function it_can_extract_another_dvd_sup_image()
+    {
+        $this->markTestSkipped('dvd sup format does not work yet');
+
+        $cue = $this->makeDvdSupCue($this->testFilePath.'sup-dvd/02-section-01.dat');
+
+        $filePath = $cue->extractImage($this->tempFilesDirectory);
     }
 
 //    /** @test */

@@ -55,11 +55,11 @@ class DvdSupCue implements SupCueInterface
         $next = 0;
 
         while($stream->position() < $nextCuePosition) {
-           // var_dump('Reading time value...'.' @ '.$stream->position());
+            var_dump('Reading time value...'.' @ '.$stream->position());
             $timeValue = $stream->uint16();
 
             $nextControlSequencePosition = $stream->position() + $stream->uint16();
-           // var_dump('next pos: ' . $nextControlSequencePosition);
+            var_dump('time value: '.$timeValue.',  next pos: ' . $nextControlSequencePosition);
 
             $next = ($nextControlSequencePosition !== $next && $nextControlSequencePosition > $stream->position())
                 ? $next = $nextControlSequencePosition
@@ -67,7 +67,7 @@ class DvdSupCue implements SupCueInterface
 
             while($stream->position() < $nextControlSequencePosition && $stream->position() < $nextCuePosition) {
                 $identifier = $stream->byte();
-               // var_dump("\n".'identifier 0x'.bin2hex($identifier).' @ '.$stream->position());
+                var_dump("\n".'identifier 0x'.bin2hex($identifier).' @ '.$stream->position());
                 switch($identifier)
                 {
                     case "\x01":
@@ -80,18 +80,18 @@ class DvdSupCue implements SupCueInterface
                     case "\x03":
                         $bitStream = Bitstream::fromData($stream->read(2));
 
-                        $this->colors[3] = $bitStream->bits(4);
-                        $this->colors[2] = $bitStream->bits(4);
-                        $this->colors[1] = $bitStream->bits(4);
                         $this->colors[0] = $bitStream->bits(4);
+                        $this->colors[1] = $bitStream->bits(4);
+                        $this->colors[2] = $bitStream->bits(4);
+                        $this->colors[3] = $bitStream->bits(4);
                         break;
                     case "\x04":
                         $bitStream = Bitstream::fromData($stream->read(2));
 
-                        $this->colorAlphas[3] = $bitStream->bits(4);
-                        $this->colorAlphas[2] = $bitStream->bits(4);
-                        $this->colorAlphas[1] = $bitStream->bits(4);
                         $this->colorAlphas[0] = $bitStream->bits(4);
+                        $this->colorAlphas[1] = $bitStream->bits(4);
+                        $this->colorAlphas[2] = $bitStream->bits(4);
+                        $this->colorAlphas[3] = $bitStream->bits(4);
                         break;
                     case "\x05":
                         $bitStream = Bitstream::fromData($stream->read(6));

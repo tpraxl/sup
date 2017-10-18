@@ -10,7 +10,7 @@ class DvdSup implements SupInterface
 {
     protected $filePath;
 
-    /** @var HddvdSupCue[]  */
+    /** @var DvdSupCue[]  */
     protected $cues = [];
 
     /** @var Stream */
@@ -22,18 +22,17 @@ class DvdSup implements SupInterface
 
         $this->stream = new Stream($this->filePath);
 
-        /** @var HddvdSupCue[] $cues */
         $cues = [];
 
         while(($cueHeader = $this->stream->read(2)) === 'SP') {
             $this->stream->rewind(2);
 
-            $cue = new HddvdSupCue($this->stream, $this->filePath);
+            $cue = new DvdSupCue($this->stream, $this->filePath);
 
             $cues[] = $cue;
         }
 
-        usort($cues, function(HddvdSupCue $a, HddvdSupCue $b) {
+        usort($cues, function(DvdSupCue $a, DvdSupCue $b) {
             return $a->getStartTime() <=> $b->getStartTime();
         });
 
