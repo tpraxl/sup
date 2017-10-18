@@ -3,6 +3,7 @@
 namespace SjorsO\Sup\Tests;
 
 use SjorsO\Sup\Bluray\BluraySup;
+use SjorsO\Sup\Formats\Dvd\DvdSup;
 use SjorsO\Sup\Hddvd\HddvdSup;
 use SjorsO\Sup\SupFile;
 use SjorsO\Sup\SupInterface;
@@ -32,13 +33,20 @@ class SupFileTest extends BaseTestCase
 
         $this->assertTrue($sup instanceof SupInterface);
 
-        $this->assertTrue($sup instanceof HddvdSup);
+        $this->assertTrue($sup instanceof HddvdSup, 'sup not instance of HddvdSup');
 
 
         $anotherSup = SupFile::open($this->testFilePath.'sup-bluray/sup-01-mini.sup');
 
         $this->assertTrue($anotherSup instanceof SupInterface);
 
-        $this->assertTrue($anotherSup instanceof BluraySup);
+        $this->assertTrue($anotherSup instanceof BluraySup, 'sup not instance of BluraySup');
+
+
+        $yetAnotherSup = SupFile::open($this->testFilePath.'sup-dvd/01-section-01.dat');
+
+        $this->assertTrue($yetAnotherSup instanceof SupInterface);
+
+        $this->assertTrue($yetAnotherSup instanceof DvdSup, 'sup not instance of DvdSup');
     }
 }

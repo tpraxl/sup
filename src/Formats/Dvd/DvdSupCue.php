@@ -55,11 +55,11 @@ class DvdSupCue implements SupCueInterface
         $next = 0;
 
         while($stream->position() < $nextCuePosition) {
-            var_dump('Reading time value...'.' @ '.$stream->position());
+            //var_dump('Reading time value...'.' @ '.$stream->position());
             $timeValue = $stream->uint16();
 
             $nextControlSequencePosition = $stream->position() + $stream->uint16();
-            var_dump('time value: '.$timeValue.',  next pos: ' . $nextControlSequencePosition);
+            //var_dump('time value: '.$timeValue.',  next pos: ' . $nextControlSequencePosition);
 
             $next = ($nextControlSequencePosition !== $next && $nextControlSequencePosition > $stream->position())
                 ? $next = $nextControlSequencePosition
@@ -67,7 +67,7 @@ class DvdSupCue implements SupCueInterface
 
             while($stream->position() < $nextControlSequencePosition && $stream->position() < $nextCuePosition) {
                 $identifier = $stream->byte();
-                var_dump("\n".'identifier 0x'.bin2hex($identifier).' @ '.$stream->position());
+                //var_dump("\n".'identifier 0x'.bin2hex($identifier).' @ '.$stream->position());
                 switch($identifier)
                 {
                     case "\x01":
@@ -171,8 +171,8 @@ class DvdSupCue implements SupCueInterface
             }
         }
 
-        var_dump("odd line stream  @ {$oddLineBitStream->position()} (should be at: ".($this->startImageOddLines+$this->imageOddLinesDataLength).") (start: {$this->startImageOddLines})");
-        var_dump("even line stream @ {$evenLineBitStream->position()} (should be at: ".($this->startImageEvenLines+$this->imageEvenLinesDataLength).") (start: {$this->startImageEvenLines})");
+        //var_dump("odd line stream  @ {$oddLineBitStream->position()} (should be at: ".($this->startImageOddLines+$this->imageOddLinesDataLength).") (start: {$this->startImageOddLines})");
+        //var_dump("even line stream @ {$evenLineBitStream->position()} (should be at: ".($this->startImageEvenLines+$this->imageEvenLinesDataLength).") (start: {$this->startImageEvenLines})");
 
         $outputFilePath = rtrim($outputDirectory, '/') . '/' . $outputFileName;
 
