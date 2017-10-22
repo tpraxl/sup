@@ -19,7 +19,7 @@ class SupFile
      * @return SupInterface|bool
      * @throws Exception
      */
-    public static function open($filePath)
+    public static function getFormat($filePath)
     {
         if(! file_exists($filePath)) {
             throw new Exception('File does not exist');
@@ -39,11 +39,23 @@ class SupFile
 
         switch($identifier)
         {
-            case 'PG': return new BluraySup($filePath);
+            case 'PG': return BluraySup::class;
             case 'SP':
-                return ($header[8] === "\x00" && $header[9] === "\x00") ? new HddvdSup($filePath) : new DvdSup($filePath);
+                return ($header[8] === "\x00" && $header[9] === "\x00") ? HddvdSup::class : DvdSup::class;
         }
 
         return false;
+    }
+
+    /**
+     * @param $filePath
+     * @return SupInterface|bool
+     * @throws Exception
+     */
+    public static function open($filePath)
+    {
+        $sup = self::getFormat($filePath);
+
+        return ($sup === false) ? false : new $sup($filePath);
     }
 }

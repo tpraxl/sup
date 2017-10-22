@@ -27,6 +27,14 @@ class SupFileTest extends BaseTestCase
     }
 
     /** @test */
+    function it_identifies_formats()
+    {
+        $sup = SupFile::getFormat($this->testFilePath.'sup-dvd/01.sup');
+
+        $this->assertSame(DvdSup::class, $sup);
+    }
+
+    /** @test */
     function it_returns_a_sup_interface()
     {
         $sup = SupFile::open($this->testFilePath.'sup-hddvd/01.sup');
