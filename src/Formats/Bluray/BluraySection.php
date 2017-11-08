@@ -32,23 +32,23 @@ class BluraySection
 
         switch($sectionIdentifier)
         {
-            case "\x16":
+            case DataSection::SECTION_TIME:
                 $section = new TimeSection($filePath, $stream->position());
                 break;
-            case "\x17":
+            case DataSection::SECTION_FRAME:
                 $section = new FrameSection($filePath, $stream->position());
                 break;
-            case "\x14":
+            case DataSection::SECTION_PALETTE:
                 $section = new PaletteSection($filePath, $stream->position());
                 break;
-            case "\x15":
+            case DataSection::SECTION_BITMAP:
                 $section = new BitmapSection($filePath, $stream->position());
                 break;
-            case "\x80":
+            case DataSection::SECTION_END:
                 $section = new EndSection($filePath, $stream->position());
                 break;
             default:
-                throw new Exception("Unknown section identifier ({$sectionIdentifier})");
+                throw new Exception('Unknown bluray section identifier (0x'.bin2hex($sectionIdentifier).')');
         }
 
         $stream->skip($section->getLength());

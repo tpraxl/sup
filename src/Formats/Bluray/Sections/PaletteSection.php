@@ -17,7 +17,7 @@ class PaletteSection extends DataSection
 
     public function getSectionIdentifier()
     {
-        return "\x14";
+        return DataSection::SECTION_PALETTE;
     }
 
     /**

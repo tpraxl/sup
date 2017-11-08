@@ -25,7 +25,7 @@ class BitmapSection extends DataSection
 
     public function getSectionIdentifier()
     {
-        return "\x15";
+        return DataSection::SECTION_BITMAP;
     }
 
     /**

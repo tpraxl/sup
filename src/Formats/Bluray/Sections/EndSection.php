@@ -9,7 +9,7 @@ class EndSection extends DataSection
 {
     public function getSectionIdentifier()
     {
-        return "\x80";
+        return DataSection::SECTION_END;
     }
 
     /**

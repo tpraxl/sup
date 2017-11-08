@@ -13,7 +13,7 @@ class FrameSection extends DataSection
 
     public function getSectionIdentifier()
     {
-        return "\x17";
+        return DataSection::SECTION_FRAME;
     }
 
     /**

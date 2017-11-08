@@ -12,7 +12,7 @@ class TimeSection extends DataSection
 
     public function getSectionIdentifier()
     {
-        return "\x16";
+        return DataSection::SECTION_TIME;
     }
 
     public function getStartTime()

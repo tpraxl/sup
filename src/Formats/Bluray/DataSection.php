@@ -7,6 +7,12 @@ use SjorsO\Sup\Streams\Stream;
 
 abstract class DataSection
 {
+    const SECTION_PALETTE = "\x14";
+    const SECTION_BITMAP  = "\x15";
+    const SECTION_TIME    = "\x16";
+    const SECTION_FRAME   = "\x17";
+    const SECTION_END     = "\x80";
+
     protected $filePath;
 
     protected $startPosition;

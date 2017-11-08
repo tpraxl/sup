@@ -76,7 +76,7 @@ class BluraySupCue implements SupCueInterface
     protected function getBitmapSections()
     {
         return array_values(array_filter($this->dataSections, function(DataSection $section) {
-            return $section->getSectionIdentifier() === "\x15";
+            return $section->getSectionIdentifier() === DataSection::SECTION_BITMAP;
         }));
     }
 
@@ -86,7 +86,7 @@ class BluraySupCue implements SupCueInterface
     protected function getPaletteSection()
     {
         $paletteSections = array_values(array_filter($this->dataSections, function(DataSection $section) {
-            return $section->getSectionIdentifier() === "\x14";
+            return $section->getSectionIdentifier() === DataSection::SECTION_PALETTE;
         }));
 
         return $paletteSections[0] ?? null;
@@ -98,7 +98,7 @@ class BluraySupCue implements SupCueInterface
     protected function getTimeSection()
     {
         $timeSections = array_values(array_filter($this->dataSections, function(DataSection $section) {
-            return $section->getSectionIdentifier() === "\x16";
+            return $section->getSectionIdentifier() === DataSection::SECTION_TIME;
         }));
 
         return $timeSections[0] ?? null;
@@ -110,7 +110,7 @@ class BluraySupCue implements SupCueInterface
     protected function getFrameSection()
     {
         $frameSections = array_values(array_filter($this->dataSections, function(DataSection $section) {
-            return $section->getSectionIdentifier() === "\x17";
+            return $section->getSectionIdentifier() === DataSection::SECTION_FRAME;
         }));
 
         return $frameSections[0] ?? null;
