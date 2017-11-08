@@ -81,4 +81,18 @@ class BluraySupTest extends BaseTestCase
             ],
         ], $manifest);
     }
+
+    /** @test */
+    function it_can_extract_the_image_from_cues_with_multiple_bitmap_sections()
+    {
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/05-bluray-multi-bitmap-section-mini.sup');
+
+        $cues = $sup->getCues();
+
+        $this->assertSame(11, count($cues));
+
+        $outputFilePath = $cues[10]->extractImage($this->tempFilesDirectory);
+
+        $this->assertMatchesFileHashSnapshot($outputFilePath);
+    }
 }

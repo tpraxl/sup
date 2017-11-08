@@ -4,6 +4,7 @@ namespace SjorsO\Sup\Formats\Bluray;
 
 use Exception;
 use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
+use SjorsO\Sup\Formats\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Formats\Bluray\Sections\TimeSection;
 use SjorsO\Sup\Formats\SupCueInterface;
@@ -65,6 +66,8 @@ class BluraySupCue implements SupCueInterface
     public function addSection(DataSection $dataSection)
     {
         $this->dataSections[] = $dataSection;
+
+        return $this;
     }
 
     /**
@@ -101,52 +104,70 @@ class BluraySupCue implements SupCueInterface
         return $timeSections[0] ?? null;
     }
 
+    /**
+     * @return FrameSection
+     */
+    protected function getFrameSection()
+    {
+        $frameSections = array_values(array_filter($this->dataSections, function(DataSection $section) {
+            return $section->getSectionIdentifier() === "\x17";
+        }));
+
+        return $frameSections[0] ?? null;
+    }
+
     public function containsImage()
     {
         $paletteSection = $this->getPaletteSection();
+        $bitmapSections = $this->getBitmapSections();
 
-        return $paletteSection !== null && $paletteSection->hasColors();
+        return count($bitmapSections) > 0 && $paletteSection !== null && $paletteSection->hasColors();
     }
 
     public function extractImage($outputDirectory = './', $outputFileName = 'frame.png')
     {
         $bitmapSections = $this->getBitmapSections();
         $paletteSection = $this->getPaletteSection();
+        $frameSection   = $this->getFrameSection();
 
-        if(count($bitmapSections) !== 1) {
-            throw new Exception('more than one bitmap section is not implemented yet');
-        }
+        $singleBitmap = count($bitmapSections) === 1;
 
-        $bitmapSection = $bitmapSections[0];
+        $image = imagecreatetruecolor(
+            $frameSection->getCanvasWidth(),
+            $frameSection->getCanvasHeight()
+        );
 
-        $totalX = $bitmapSection->getWidth();
-        $totalY = $bitmapSection->getHeight();
+        for($bitmapCount = 0; $bitmapCount < count($bitmapSections); $bitmapCount++) {
+            $bitmapSection = $bitmapSections[$bitmapCount];
+            $frame = $frameSection->getFrames()[$bitmapCount];
 
-        $stream = $bitmapSection->getRleBitmapStream();
+            $currentX = $singleBitmap ? 0 : $frame['x'];
+            $currentY = $singleBitmap ? 0 : $frame['y'];
 
-        $image = imagecreatetruecolor($totalX , $totalY);
+            $frameTotalX = $currentX + $frame['width'];
+            $frameTotalY = $currentY + $frame['height'];
 
-        $currentX = 0;
-        $currentY = 0;
+            $stream = $bitmapSection->getRleBitmapStream();
 
-        while($currentY < $totalY) {
-            $stream->nextRun();
+            while($currentY < $frameTotalY) {
+                $stream->nextRun();
 
-            $color = $paletteSection->getImageColor($stream->colorIndex(), $image);
+                $color = $paletteSection->getImageColor($stream->colorIndex(), $image);
 
-            $fillUntilX = $stream->toEndOfLine() ? $totalX : ($currentX + $stream->runLength());
+                $fillUntilX = $stream->toEndOfLine() ? $frameTotalX : ($currentX + $stream->runLength());
 
-            if($fillUntilX > $totalX) {
-                throw new Exception('Trying to fill beyond end of line');
-            }
+                if($fillUntilX > $frameTotalX) {
+                    throw new Exception('Bluray run length error: trying to fill beyond end of line');
+                }
 
-            for(; $currentX < $fillUntilX; $currentX++) {
-                imagesetpixel($image, $currentX, $currentY, $color);
-            }
+                for(; $currentX < $fillUntilX; $currentX++) {
+                    imagesetpixel($image, $currentX, $currentY, $color);
+                }
 
-            if($stream->toEndOfLine()) {
-                $currentX = 0;
-                $currentY++;
+                if($stream->toEndOfLine()) {
+                    $currentX = $singleBitmap ? 0 : $frame['x'];
+                    $currentY++;
+                }
             }
         }
 

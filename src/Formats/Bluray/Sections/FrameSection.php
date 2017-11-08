@@ -54,4 +54,28 @@ class FrameSection extends DataSection
     {
         return $this->frames;
     }
+
+    public function getCanvasWidth()
+    {
+        if(count($this->frames) === 1) {
+            return $this->frames[0]['width'];
+        }
+
+        return max(
+            $this->frames[0]['x'] + $this->frames[0]['width'],
+            $this->frames[1]['x'] + $this->frames[1]['width']
+        );
+    }
+
+    public function getCanvasHeight()
+    {
+        if(count($this->frames) === 1) {
+            return $this->frames[0]['height'];
+        }
+
+        return max(
+            $this->frames[0]['y'] + $this->frames[0]['height'],
+            $this->frames[1]['y'] + $this->frames[1]['height']
+        );
+    }
 }
