@@ -133,19 +133,20 @@ class BluraySupCue implements SupCueInterface
         $singleBitmap = count($bitmapSections) === 1;
 
         $image = imagecreatetruecolor(
-            $frameSection->getCanvasWidth(),
-            $frameSection->getCanvasHeight()
+            $singleBitmap ? $bitmapSections[0]->getWidth()  : $frameSection->getCanvasWidth(),
+            $singleBitmap ? $bitmapSections[0]->getHeight() : $frameSection->getCanvasHeight()
         );
 
         for($bitmapCount = 0; $bitmapCount < count($bitmapSections); $bitmapCount++) {
             $bitmapSection = $bitmapSections[$bitmapCount];
-            $frame = $frameSection->getFrames()[$bitmapCount];
+
+            $frame = $frameSection->getFrameForBitmap($bitmapSection);
 
             $currentX = $singleBitmap ? 0 : $frame['x'];
             $currentY = $singleBitmap ? 0 : $frame['y'];
 
-            $frameTotalX = $currentX + $frame['width'];
-            $frameTotalY = $currentY + $frame['height'];
+            $frameTotalX = $currentX + $bitmapSection->getWidth();
+            $frameTotalY = $currentY + $bitmapSection->getHeight();
 
             $stream = $bitmapSection->getRleBitmapStream();
 

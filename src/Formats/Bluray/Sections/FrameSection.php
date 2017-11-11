@@ -55,6 +55,22 @@ class FrameSection extends DataSection
         return $this->frames;
     }
 
+    /**
+     * @param BitmapSection $bitmapSection
+     * @return mixed
+     * @throws Exception
+     */
+    public function getFrameForBitmap(BitmapSection $bitmapSection)
+    {
+        foreach($this->frames as $frame) {
+            if($frame['width'] === $bitmapSection->getWidth() && $frame['height'] === $bitmapSection->getHeight()) {
+                return $frame;
+            }
+        }
+
+        return $this->frames[0];
+    }
+
     public function getCanvasWidth()
     {
         if(count($this->frames) === 1) {

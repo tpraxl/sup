@@ -95,4 +95,37 @@ class BluraySupTest extends BaseTestCase
 
         $this->assertMatchesFileHashSnapshot($outputFilePath);
     }
+
+    /** @test */
+    function it_selects_the_correct_frame_for_the_bitmap_section()
+    {
+        // The 7th cue of this sup has 2 frames, but only 1 bitmap section
+
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/06-bluray-spanish.sup');
+
+        $cues = $sup->getCues();
+
+        $this->assertSame(73, count($cues));
+
+        $outputFilePaths = $sup->extractImages($this->tempFilesDirectory);
+
+        $this->assertMatchesFileHashSnapshot($outputFilePaths[7]);
+    }
+
+    /** @test */
+    function if_there_is_only_one_bitmap_section_do_not_use_frame_for_canvas_size()
+    {
+        // This 6th cue has small single bitmap section, but a large frame.
+        // It should use the bitmap size as canvas size
+
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/06-bluray-spanish.sup');
+
+        $cues = $sup->getCues();
+
+        $this->assertSame(73, count($cues));
+
+        $outputFilePath = $cues[6]->extractImage($this->tempFilesDirectory);
+
+        $this->assertMatchesFileHashSnapshot($outputFilePath);
+    }
 }
