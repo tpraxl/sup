@@ -178,6 +178,8 @@ class DvdSupCue implements SupCueInterface
 
         imagepng($image, $outputFilePath);
 
+        imagedestroy($image);
+
         return $outputFilePath;
     }
 

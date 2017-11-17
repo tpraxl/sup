@@ -176,6 +176,8 @@ class BluraySupCue implements SupCueInterface
 
         imagepng($image, $outputFilePath);
 
+        imagedestroy($image);
+
         return $outputFilePath;
     }
 }
