@@ -21,6 +21,19 @@ class BluraySupTest extends BaseTestCase
     }
 
     /** @test */
+    function it_can_put_the_total_frame_count_in_the_file_name_when_extracting()
+    {
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-01-mini.sup');
+
+        $outputFilePaths = $sup->extractImages($this->tempFilesDirectory, '%d-%t');
+
+        $this->assertSame(
+            $this->tempFilesDirectory.'00001-00024',
+            $outputFilePaths[0]
+        );
+    }
+
+    /** @test */
     function it_can_extract_all_images()
     {
         $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-01-mini.sup');
@@ -70,12 +83,12 @@ class BluraySupTest extends BaseTestCase
 
         $this->assertSame([
             [
-                'index' => 0,
+                'index' => 1,
                 'startTime' => 177531,
                 'endTime' => 181355,
             ],
             [
-                'index' => 1,
+                'index' => 2,
                 'startTime' => 181615,
                 'endTime' => 184615,
             ],

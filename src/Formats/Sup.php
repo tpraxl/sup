@@ -26,7 +26,7 @@ abstract class Sup
         });
 
         for($cueIndex = 0; $cueIndex < count($cues); $cueIndex++) {
-            $cues[$cueIndex]->setCueIndex($cueIndex);
+            $cues[$cueIndex]->setCueIndex($cueIndex + 1);
         }
 
         $this->cues = $cues;
@@ -49,11 +49,13 @@ abstract class Sup
         return $cues;
     }
 
-    public function extractImages($outputDirectory = './', $fileNameTemplate = 'frame-%d.png')
+    public function extractImages($outputDirectory = './', $fileNameTemplate = 'frame-[%d-%t].png')
     {
         if(strpos($fileNameTemplate, '%d') === false) {
             throw new Exception('File name needs to contain a %d');
         }
+
+        $fileNameTemplate = str_replace('%t', str_pad(count($this->cues), 5, '0', STR_PAD_LEFT), $fileNameTemplate);
 
         $extractedFilePaths = [];
 
