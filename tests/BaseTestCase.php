@@ -23,27 +23,9 @@ abstract class BaseTestCase extends TestCase
 
         $this->testFilePath = $this->baseTestPath.'Files/';
 
-        $this->tempFilesDirectory = $this->testFilePath.'temp/';
-    }
+        $this->tempFilesDirectory = $this->baseTestPath.'temp/'.bin2hex(random_bytes(32)).'/';
 
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->emptyTempFilesDirectory();
-    }
-
-    protected function emptyTempFilesDirectory()
-    {
-        $fileNames = scandir($this->tempFilesDirectory);
-
-        $fileNames = array_filter($fileNames, function($str) {
-            return substr($str, 0, 1) !== '.';
-        });
-
-        foreach($fileNames as $name) {
-            unlink($this->tempFilesDirectory . $name);
-        }
+        mkdir($this->tempFilesDirectory);
     }
 
     protected function getSnapshotDirectory(): string

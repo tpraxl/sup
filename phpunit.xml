@@ -4,5 +4,7 @@
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
+    <extensions>
+        <extension class="SjorsO\Sup\Tests\SuiteBootstrap"/>
+    </extensions>
 </phpunit>
-

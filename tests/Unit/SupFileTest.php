@@ -14,7 +14,7 @@ class SupFileTest extends BaseTestCase
     /** @test */
     function it_returns_false_for_files_that_are_not_sups()
     {
-        $sup = SupFile::open($this->testFilePath.'temp/.gitignore');
+        $sup = SupFile::open($this->baseTestPath.'BaseTestCase.php');
 
         $this->assertFalse($sup);
     }
