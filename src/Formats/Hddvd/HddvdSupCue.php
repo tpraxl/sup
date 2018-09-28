@@ -4,7 +4,7 @@ namespace SjorsO\Sup\Formats\Hddvd;
 
 use Closure;
 use Exception;
-use SjorsO\Bitstream\BitStream;
+use SjorsO\Sup\Streams\BitStream;
 use SjorsO\Sup\Streams\HddvdRleStream;
 use SjorsO\Sup\Streams\Stream;
 use SjorsO\Sup\Formats\SupCueInterface;

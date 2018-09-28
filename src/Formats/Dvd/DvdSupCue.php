@@ -3,7 +3,7 @@
 namespace SjorsO\Sup\Formats\Dvd;
 
 use Exception;
-use SjorsO\Bitstream\BitStream;
+use SjorsO\Sup\Streams\BitStream;
 use SjorsO\Sup\Streams\DvdRleStream;
 use SjorsO\Sup\Streams\Stream;
 use SjorsO\Sup\Formats\SupCueInterface;

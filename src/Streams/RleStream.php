@@ -2,8 +2,6 @@
 
 namespace SjorsO\Sup\Streams;
 
-use SjorsO\Bitstream\BitStream;
-
 abstract class RleStream
 {
     protected $bitStream;
