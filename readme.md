@@ -1,7 +1,11 @@
 # Sup
 Work in progress
 
-## Install
+## Installation
+Required extensions:
+- [gd](http://php.net/manual/en/book.image.php) - for creating images from sup cues
+
+Installation:
 ```bash
 composer require sjorso/sup
 ```
