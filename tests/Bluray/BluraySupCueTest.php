@@ -26,7 +26,7 @@ class BluraySupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($filePath);
+        $this->assertMatchesFileSnapshot($filePath);
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class BluraySupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($filePath);
+        $this->assertMatchesFileSnapshot($filePath);
     }
 
     /** @test */
@@ -62,6 +62,6 @@ class BluraySupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($filePath);
+        $this->assertMatchesFileSnapshot($filePath);
     }
 }

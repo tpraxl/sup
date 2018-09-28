@@ -21,6 +21,6 @@ class HddvdSupTest extends BaseTestCase
             $this->assertTrue(filesize($filePath) > 512, basename($filePath).' was smaller than 512 bytes');
         }
 
-        $this->assertMatchesFileHashSnapshot($filePaths[112]);
+        $this->assertMatchesFileSnapshot($filePaths[112]);
     }
 }

@@ -9,6 +9,8 @@ abstract class BaseTestCase extends TestCase
 {
     use MatchesSnapshots;
 
+    public $baseTestPath;
+
     public $testFilePath;
 
     public $tempFilesDirectory;
@@ -17,7 +19,9 @@ abstract class BaseTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->testFilePath = __DIR__.'/files/';
+        $this->baseTestPath = rtrim(__DIR__, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+
+        $this->testFilePath = $this->baseTestPath.'files/';
 
         $this->tempFilesDirectory = $this->testFilePath.'temp/';
     }
@@ -44,6 +48,11 @@ abstract class BaseTestCase extends TestCase
 
     protected function getSnapshotDirectory(): string
     {
-        return $this->testFilePath.'__snapshots__';
+        return $this->baseTestPath.'_snapshots_';
+    }
+
+    protected function getFileSnapshotDirectory(): string
+    {
+        return $this->baseTestPath.'_snapshots_';
     }
 }

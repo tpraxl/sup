@@ -17,7 +17,7 @@ class BluraySupTest extends BaseTestCase
 
         $outputImagePath = $cues[50]->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputImagePath);
+        $this->assertMatchesFileSnapshot($outputImagePath);
     }
 
     /** @test */
@@ -46,7 +46,7 @@ class BluraySupTest extends BaseTestCase
 
         $this->assertSame(24, count($outputFilePaths));
 
-        $this->assertMatchesFileHashSnapshot($outputFilePaths[12]);
+        $this->assertMatchesFileSnapshot($outputFilePaths[12]);
 
         foreach($outputFilePaths as $filePath) {
             $this->assertTrue(file_exists($filePath), $filePath.' does not exist');
@@ -106,7 +106,7 @@ class BluraySupTest extends BaseTestCase
 
         $outputFilePath = $cues[10]->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePath);
+        $this->assertMatchesFileSnapshot($outputFilePath);
     }
 
     /** @test */
@@ -122,7 +122,7 @@ class BluraySupTest extends BaseTestCase
 
         $outputFilePaths = $sup->extractImages($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePaths[7]);
+        $this->assertMatchesFileSnapshot($outputFilePaths[7]);
     }
 
     /** @test */
@@ -139,6 +139,6 @@ class BluraySupTest extends BaseTestCase
 
         $outputFilePath = $cues[6]->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePath);
+        $this->assertMatchesFileSnapshot($outputFilePath);
     }
 }

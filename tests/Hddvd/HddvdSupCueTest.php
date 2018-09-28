@@ -93,7 +93,7 @@ class HddvdSupCueTest extends BaseTestCase
 
         $outputFilePath = $problematicCue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePath);
+        $this->assertMatchesFileSnapshot($outputFilePath);
 
         $this->assertSame(299982, $stream->position());
     }
@@ -109,7 +109,7 @@ class HddvdSupCueTest extends BaseTestCase
 
         $outputFilePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePath);
+        $this->assertMatchesFileSnapshot($outputFilePath);
     }
 
     /** @test */
@@ -125,7 +125,7 @@ class HddvdSupCueTest extends BaseTestCase
 
         $outputFilePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePath);
+        $this->assertMatchesFileSnapshot($outputFilePath);
     }
 
     /** @test */
@@ -142,6 +142,6 @@ class HddvdSupCueTest extends BaseTestCase
 
         $outputFilePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($outputFilePath);
+        $this->assertMatchesFileSnapshot($outputFilePath);
     }
 }

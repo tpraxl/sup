@@ -37,7 +37,7 @@ class DvdSupCueTest extends BaseTestCase
 
         $filePath = $cue->extractImage($this->tempFilesDirectory);
 
-        $this->assertMatchesFileHashSnapshot($filePath);
+        $this->assertMatchesFileSnapshot($filePath);
     }
 
     /** @test */

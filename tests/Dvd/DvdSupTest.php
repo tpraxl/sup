@@ -17,7 +17,7 @@ class DvdSupTest extends BaseTestCase
 
         $this->assertSame(24, count($outputFilePaths));
 
-        $this->assertMatchesFileHashSnapshot($outputFilePaths[6]);
+        $this->assertMatchesFileSnapshot($outputFilePaths[6]);
 
         foreach($outputFilePaths as $filePath) {
             $this->assertTrue(file_exists($filePath), $filePath.' does not exist');
