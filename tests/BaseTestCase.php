@@ -21,7 +21,7 @@ abstract class BaseTestCase extends TestCase
 
         $this->baseTestPath = rtrim(__DIR__, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 
-        $this->testFilePath = $this->baseTestPath.'files/';
+        $this->testFilePath = $this->baseTestPath.'Files/';
 
         $this->tempFilesDirectory = $this->testFilePath.'temp/';
     }
