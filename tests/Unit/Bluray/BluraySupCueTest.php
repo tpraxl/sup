@@ -1,6 +1,6 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Bluray;
 
 use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
 use SjorsO\Sup\Formats\Bluray\Sections\EndSection;
@@ -8,6 +8,7 @@ use SjorsO\Sup\Formats\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
 use SjorsO\Sup\Formats\Bluray\Sections\TimeSection;
 use SjorsO\Sup\Formats\Bluray\BluraySupCue;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class BluraySupCueTest extends BaseTestCase
 {

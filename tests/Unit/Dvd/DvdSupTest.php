@@ -1,8 +1,9 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Dvd;
 
 use SjorsO\Sup\Formats\Dvd\DvdSup;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class DvdSupTest extends BaseTestCase
 {

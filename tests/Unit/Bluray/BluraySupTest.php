@@ -1,8 +1,9 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Bluray;
 
 use SjorsO\Sup\Formats\Bluray\BluraySup;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class BluraySupTest extends BaseTestCase
 {

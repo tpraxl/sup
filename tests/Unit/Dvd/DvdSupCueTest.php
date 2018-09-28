@@ -1,9 +1,10 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Dvd;
 
 use SjorsO\Sup\Formats\Dvd\DvdSupCue;
 use SjorsO\Sup\Streams\Stream;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class DvdSupCueTest extends BaseTestCase
 {

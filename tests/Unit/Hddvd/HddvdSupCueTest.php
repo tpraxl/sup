@@ -1,9 +1,10 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Hddvd;
 
 use SjorsO\Sup\Formats\Hddvd\HddvdSupCue;
 use SjorsO\Sup\Streams\Stream;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class HddvdSupCueTest extends BaseTestCase
 {

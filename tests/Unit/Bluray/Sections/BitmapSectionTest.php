@@ -1,8 +1,9 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Bluray\Sections;
 
 use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class BitmapSectionTest extends BaseTestCase
 {

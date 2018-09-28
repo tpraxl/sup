@@ -1,8 +1,9 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit\Hddvd;
 
 use SjorsO\Sup\Formats\Hddvd\HddvdSup;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class HddvdSupTest extends BaseTestCase
 {

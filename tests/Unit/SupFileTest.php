@@ -1,12 +1,13 @@
 <?php
 
-namespace SjorsO\Sup\Tests;
+namespace SjorsO\Sup\Tests\Unit;
 
 use SjorsO\Sup\Formats\Bluray\BluraySup;
 use SjorsO\Sup\Formats\Dvd\DvdSup;
 use SjorsO\Sup\Formats\Hddvd\HddvdSup;
 use SjorsO\Sup\SupFile;
 use SjorsO\Sup\Formats\SupInterface;
+use SjorsO\Sup\Tests\BaseTestCase;
 
 class SupFileTest extends BaseTestCase
 {
