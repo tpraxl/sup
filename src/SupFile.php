@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup;
 
-use Exception;
+use RuntimeException;
 use SjorsO\Sup\Formats\Bluray\BluraySup;
 use SjorsO\Sup\Formats\Dvd\DvdSup;
 use SjorsO\Sup\Formats\Hddvd\HddvdSup;
@@ -12,20 +12,23 @@ class SupFile
 {
     private function __construct()
     {
+        //
     }
 
     /**
      * @param $filePath
+     *
      * @return SupInterface|bool
-     * @throws Exception
+     *
+     * @throws RuntimeException
      */
     public static function getFormat($filePath)
     {
-        if(! file_exists($filePath)) {
-            throw new Exception('File does not exist');
+        if (! file_exists($filePath)) {
+            throw new RuntimeException('File does not exist');
         }
 
-        if(filesize($filePath) < 12) {
+        if (filesize($filePath) < 12) {
             return false;
         }
 
@@ -37,11 +40,11 @@ class SupFile
 
         fclose($handle);
 
-        switch($identifier)
-        {
-            case 'PG': return BluraySup::class;
+        switch ($identifier) {
+            case 'PG':
+                return BluraySup::class;
             case 'SP':
-                return ($header[8] === "\x00" && $header[9] === "\x00") ? HddvdSup::class : DvdSup::class;
+                return $header[8] === "\x00" && $header[9] === "\x00" ? HddvdSup::class : DvdSup::class;
         }
 
         return false;
@@ -49,13 +52,15 @@ class SupFile
 
     /**
      * @param $filePath
+     *
      * @return SupInterface|bool
-     * @throws Exception
+     *
+     * @throws RuntimeException
      */
     public static function open($filePath)
     {
         $sup = self::getFormat($filePath);
 
-        return ($sup === false) ? false : new $sup($filePath);
+        return $sup === false ? false : new $sup($filePath);
     }
 }

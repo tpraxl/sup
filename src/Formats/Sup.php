@@ -91,5 +91,4 @@ abstract class Sup
     protected abstract function cue();
 
     protected abstract function identifier();
-
 }

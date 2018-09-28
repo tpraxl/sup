@@ -2,7 +2,7 @@
 
 namespace SjorsO\Sup\Streams;
 
-use Exception;
+use RuntimeException;
 
 class Stream
 {
@@ -51,12 +51,12 @@ class Stream
 
     public function uint32le()
     {
-        return (int)round(unpack('V', $this->read(4))[1] / 90);
+        return (int) round(unpack('V', $this->read(4))[1] / 90);
     }
 
     public function skip($length)
     {
-        if($length !== 0) {
+        if ($length !== 0) {
             $this->assertMaximumPosition($length);
 
             fseek($this->handle, $length, SEEK_CUR);
@@ -93,8 +93,12 @@ class Stream
 
     protected function assertMaximumPosition($readLength)
     {
-        if($this->maximumPosition !== null && $this->position() + $readLength > $this->maximumPosition) {
-            throw new Exception("Reading {$readLength} would exceed maximum position ({$this->maximumPosition})");
+        if ($this->maximumPosition === null) {
+            return;
+        }
+
+        if ($this->position() + $readLength > $this->maximumPosition) {
+            throw new RuntimeException("Reading $readLength would exceed maximum position ($this->maximumPosition)");
         }
     }
 }

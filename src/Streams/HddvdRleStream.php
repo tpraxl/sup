@@ -8,11 +8,13 @@ class HddvdRleStream extends RleStream
     {
         $hasRunLength = $this->bitStream->bool();
 
-        $this->colorIndex = $this->bitStream->bool() ? $this->bitStream->bits(8) : $this->bitStream->bits(2);
+        $this->colorIndex = $this->bitStream->bool()
+            ? $this->bitStream->bits(8)
+            : $this->bitStream->bits(2);
 
         $this->runLength = $hasRunLength ? $this->figureOutRunLength() : 1;
 
-        $this->toEndOfLine = ($this->runLength === 0);
+        $this->toEndOfLine = $this->runLength === 0;
     }
 
     protected function figureOutRunLength()
@@ -25,6 +27,6 @@ class HddvdRleStream extends RleStream
 
         $runLength = $this->bitStream->bits(7);
 
-        return ($runLength === 0) ? 0 : $runLength + 9;
+        return $runLength === 0 ? 0 : $runLength + 9;
     }
 }

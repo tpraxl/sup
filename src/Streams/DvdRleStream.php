@@ -8,7 +8,7 @@ class DvdRleStream extends RleStream
     {
         $length = $this->bitStream->bits(2);
 
-        if($length > 0) {
+        if ($length > 0) {
             $this->runLength = $length;
 
             $this->colorIndex = $this->bitStream->bits(2);
@@ -18,18 +18,19 @@ class DvdRleStream extends RleStream
 
         $numberOfZeros = 1;
 
-        while(($length = $this->bitStream->bits(2)) === 0 && $numberOfZeros < 7) {
+        while (($length = $this->bitStream->bits(2)) === 0 && $numberOfZeros < 7) {
             $numberOfZeros++;
         }
 
-        if($numberOfZeros === 7) {
+        if ($numberOfZeros === 7) {
             $this->toEndOfLine = true;
             $this->runLength = 0;
             $this->colorIndex = $length;
+
             return;
         }
 
-        while($numberOfZeros-- > 0) {
+        while ($numberOfZeros-- > 0) {
             $length = ($length << 2) + $this->bitStream->bits(2);
         }
 
