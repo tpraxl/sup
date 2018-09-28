@@ -1,7 +1,5 @@
-# Readme
+# Sup
 Work in progress
-
-Originally made for [subtitletools.com](https://subtitletools.com/)
 
 ## Install
 ```bash
