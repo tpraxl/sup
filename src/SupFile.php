@@ -61,6 +61,6 @@ class SupFile
     {
         $sup = self::getFormat($filePath);
 
-        return $sup === false ? false : new $sup($filePath);
+        return $sup ? new $sup($filePath) : false;
     }
 }

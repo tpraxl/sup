@@ -57,6 +57,24 @@ class BluraySupTest extends BaseTestCase
     }
 
     /** @test */
+    function it_can_extract_all_images_separately()
+    {
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-01-mini.sup');
+
+        $indexes = $sup->cueIndexes();
+
+        $this->assertCount(24, $indexes);
+
+        $filePaths = [];
+
+        foreach ($indexes as $index) {
+            $filePaths[] = $sup->extractImage($index, $this->tempFilesDirectory);
+        }
+
+        $this->assertCount(24, $filePaths);
+    }
+
+    /** @test */
     function it_fills_cues_with_start_and_end_times()
     {
         $sup = new BluraySup($this->testFilePath.'sup-bluray/sup-02-mini.sup');

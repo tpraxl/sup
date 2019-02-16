@@ -36,26 +36,32 @@ class SupFileTest extends BaseTestCase
     }
 
     /** @test */
-    function it_returns_a_sup_interface()
+    function it_identifies_bluray_sups()
+    {
+        $sup = SupFile::open($this->testFilePath.'sup-bluray/sup-01-mini.sup');
+
+        $this->assertInstanceOf(SupInterface::class, $sup);
+
+        $this->assertInstanceOf(BluraySup::class, $sup);
+    }
+
+    /** @test */
+    function it_identifies_hddvd_sups()
     {
         $sup = SupFile::open($this->testFilePath.'sup-hddvd/01.sup');
 
-        $this->assertTrue($sup instanceof SupInterface);
+        $this->assertInstanceOf(SupInterface::class, $sup);
 
-        $this->assertTrue($sup instanceof HddvdSup, 'sup not instance of HddvdSup');
+        $this->assertInstanceOf(HddvdSup::class, $sup);
+    }
 
+    /** @test */
+    function it_identifies_dvd_sups()
+    {
+        $sup = SupFile::open($this->testFilePath.'sup-dvd/01-section-01.dat');
 
-        $anotherSup = SupFile::open($this->testFilePath.'sup-bluray/sup-01-mini.sup');
+        $this->assertInstanceOf(SupInterface::class, $sup);
 
-        $this->assertTrue($anotherSup instanceof SupInterface);
-
-        $this->assertTrue($anotherSup instanceof BluraySup, 'sup not instance of BluraySup');
-
-
-        $yetAnotherSup = SupFile::open($this->testFilePath.'sup-dvd/01-section-01.dat');
-
-        $this->assertTrue($yetAnotherSup instanceof SupInterface);
-
-        $this->assertTrue($yetAnotherSup instanceof DvdSup, 'sup not instance of DvdSup');
+        $this->assertInstanceOf(DvdSup::class, $sup);
     }
 }

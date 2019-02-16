@@ -51,26 +51,48 @@ abstract class Sup
 
     public function extractImages($outputDirectory = './', $fileNameTemplate = 'frame-[%d-%t].png')
     {
+        $extractedFilePaths = [];
+
+        foreach ($this->cueIndexes() as $index) {
+            $extractedFilePaths[] = $this->extractImage($index, $outputDirectory, $fileNameTemplate);
+        }
+
+        return $extractedFilePaths;
+    }
+
+    public function extractImage($index, $outputDirectory = './', $fileNameTemplate = 'frame-[%d-%t].png')
+    {
         if(strpos($fileNameTemplate, '%d') === false) {
             throw new Exception('File name needs to contain a %d');
         }
 
         $fileNameTemplate = str_replace('%t', str_pad(count($this->cues), 5, '0', STR_PAD_LEFT), $fileNameTemplate);
 
-        $extractedFilePaths = [];
+        $cue = $this->cues[$index];
 
-        foreach($this->cues as $cue) {
-            $fileName = str_replace('%d', str_pad($cue->getCueIndex(), 5, '0', STR_PAD_LEFT), $fileNameTemplate);
+        $fileName = str_replace('%d', str_pad($cue->getCueIndex(), 5, '0', STR_PAD_LEFT), $fileNameTemplate);
 
-            $extractedFilePaths[] = $cue->extractImage($outputDirectory, $fileName);
-        }
-
-        return $extractedFilePaths;
+        return $cue->extractImage($outputDirectory, $fileName);
     }
 
+    /**
+     * @return array
+     *
+     * @deprecated Use "cues()" instead
+     */
     public function getCues()
     {
+        return $this->cues();
+    }
+
+    public function cues()
+    {
         return $this->cues;
+    }
+
+    public function cueIndexes()
+    {
+        return array_keys($this->cues());
     }
 
     public function getCueManifest()
