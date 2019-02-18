@@ -3,6 +3,7 @@
 namespace SjorsO\Sup\Formats\Bluray;
 
 use Exception;
+use RuntimeException;
 use SjorsO\Sup\Formats\Bluray\Sections\BitmapSection;
 use SjorsO\Sup\Formats\Bluray\Sections\FrameSection;
 use SjorsO\Sup\Formats\Bluray\Sections\PaletteSection;
@@ -41,6 +42,10 @@ class BluraySupCue implements SupCueInterface
     {
         if($this->startTime === null) {
             $timeSection = $this->getTimeSection();
+
+            if (! $timeSection) {
+                throw new RuntimeException('Bluray cue has no time section');
+            }
 
             $this->startTime = $timeSection->getStartTime();
         }

@@ -160,4 +160,19 @@ class BluraySupTest extends BaseTestCase
 
         $this->assertMatchesFileSnapshot($outputFilePath);
     }
+
+    /** @test */
+    function it_handles_this_01()
+    {
+        $this->expectExceptionMessage('Bluray cue has no time section');
+
+        // When this file gets parsed, one of the cues is null, this causes the following error:
+        //
+        // Call to a member function getStartTime() on null
+        // #0 Formats/Bluray/BluraySup.php(36): SjorsO\\Sup\\Formats\\Bluray\\BluraySupCue->getStartTime()
+        // #1 Formats/Sup.php(22): SjorsO\\Sup\\Formats\\Bluray\\BluraySup->readAllCues()
+        // #2 SupFile.php(64): SjorsO\\Sup\\Formats\\Sup->__construct('/var/www/st/sha...')
+
+        $sup = new BluraySup($this->testFilePath.'sup-bluray/07-null-cue.sup');
+    }
 }
